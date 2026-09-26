@@ -1,0 +1,974 @@
+﻿@model IEnumerable<CampusCoin.Controllers.BudgetsController.BudgetSummary>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Budgets";
+    var budgets = Model.ToList();
+
+    var totalBudgets = budgets.Count;
+    var totalBudgeted = budgets.Sum(x => x.LimitAmount);
+    var totalSpent = budgets.Sum(x => x.ActualSpent);
+    var totalRemaining = budgets.Sum(x => x.Remaining);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>CampusCoin - Budgets</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+            background: var(--bg-light);
+            color: var(--brand-navy);
+        }
+
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+
+        /* NAVBAR */
+
+        .main-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .nav-link {
+            color: var(--brand-navy) !important;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--brand-gold) !important;
+        }
+
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold) !important;
+            border-color: var(--brand-gold) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-gold:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger {
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c !important;
+            border-color: #b91c1c !important;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 42px 0;
+        }
+
+        .page-header h1 {
+            margin-bottom: 8px;
+            font-size: 1.85rem;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.84rem;
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* CONTENT */
+
+        .page-content {
+            flex: 1;
+            padding: 45px 0 60px;
+        }
+
+        /* SUMMARY */
+
+        .summary-card {
+            height: 100%;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+        }
+
+        .summary-label {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 1.45rem;
+            font-weight: 800;
+        }
+
+        .summary-value.success {
+            color: #166534;
+        }
+
+        /* BUDGET TABLE */
+
+        .budget-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .panel-header {
+            padding: 22px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .panel-subtitle {
+            margin: 5px 0 0;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .budget-table {
+            margin: 0;
+        }
+
+        .budget-table thead th {
+            padding: 14px 18px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .budget-table tbody td {
+            padding: 18px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--brand-navy);
+            font-size: 0.79rem;
+            vertical-align: middle;
+        }
+
+        .budget-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .budget-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .category-name {
+            font-weight: 700;
+        }
+
+        .month-text {
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .money {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .remaining-positive {
+            color: #166534;
+        }
+
+        .remaining-negative {
+            color: #dc2626;
+        }
+
+        .usage-text {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .usage-safe {
+            color: #166534;
+        }
+
+        .usage-warning {
+            color: #b45309;
+        }
+
+        .usage-danger {
+            color: #dc2626;
+        }
+
+        .progress {
+            height: 8px;
+            min-width: 120px;
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            border-radius: 10px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            padding: 75px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+            font-size: 1.4rem;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 8px;
+            color: var(--brand-navy);
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .empty-state p {
+            margin: 0 auto 20px;
+            max-width: 500px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer {
+            padding: 24px 0;
+            background: var(--brand-navy);
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        @@media (max-width: 768px) {
+
+            .page-header {
+                padding: 35px 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.55rem;
+            }
+
+            .budget-table thead th,
+            .budget-table tbody td {
+                padding: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-lg main-navbar">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Smart Student Budgeting
+                    </span>
+
+                </div>
+
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#studentNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse"
+                 id="studentNavbar">
+
+                <div class="navbar-nav mx-auto">
+
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link">
+                        Dashboard
+                    </a>
+
+                    <a asp-controller="Transactions"
+                       asp-action="Index"
+                       class="nav-link">
+                        Transactions
+                    </a>
+
+                    <a asp-controller="Budgets"
+                       asp-action="Index"
+                       class="nav-link active">
+                        Budgets
+                    </a>
+
+                    <a asp-controller="SavingTips"
+                       asp-action="Index"
+                       class="nav-link">
+                        Saving Tips
+                    </a>
+
+                    <a asp-controller="Bookmarks"
+                       asp-action="Index"
+                       class="nav-link">
+                        Bookmarks
+                    </a>
+
+                    <a asp-controller="Notes"
+                       asp-action="Index"
+                       class="nav-link">
+                        Notes
+                    </a>
+
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-navy btn-sm">
+
+                        <i class="fa-solid fa-user me-1"></i>
+                        Profile
+
+                    </a>
+
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-navy btn-sm">
+
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <header class="page-header">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <span class="page-badge">
+                <i class="fa-solid fa-wallet me-1"></i>
+                Budget Planning
+            </span>
+
+            <h1 class="mt-3">
+                My Budgets
+            </h1>
+
+            <p>
+                Set monthly spending limits and compare them with your actual spending.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="page-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <!-- SUMMARY -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="summary-card">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="summary-icon">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+
+                            <div>
+
+                                <span class="summary-label">
+                                    Total Budgets
+                                </span>
+
+                                <h2 class="summary-value">
+                                    @totalBudgets
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="summary-card">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="summary-icon">
+                                <i class="fa-solid fa-coins"></i>
+                            </div>
+
+                            <div>
+
+                                <span class="summary-label">
+                                    Budgeted
+                                </span>
+
+                                <h2 class="summary-value">
+                                    Rs. @totalBudgeted.ToString("N0")
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="summary-card">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="summary-icon">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+
+                            <div>
+
+                                <span class="summary-label">
+                                    Actual Spent
+                                </span>
+
+                                <h2 class="summary-value">
+                                    Rs. @totalSpent.ToString("N0")
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-md-6">
+
+                    <div class="summary-card">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="summary-icon">
+                                <i class="fa-solid fa-piggy-bank"></i>
+                            </div>
+
+                            <div>
+
+                                <span class="summary-label">
+                                    Remaining
+                                </span>
+
+                                <h2 class="summary-value success">
+                                    Rs. @totalRemaining.ToString("N0")
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUDGET LIST -->
+
+            <div class="budget-panel">
+
+                <div class="panel-header">
+
+                    <div class="d-flex flex-column flex-md-row
+                                justify-content-between
+                                align-items-md-center
+                                gap-3">
+
+                        <div>
+
+                            <h2 class="panel-title">
+                                Budget List
+                            </h2>
+
+                            <p class="panel-subtitle">
+                                Monitor each category against its monthly limit.
+                            </p>
+
+                        </div>
+
+                        <a asp-controller="Budgets"
+                           asp-action="Create"
+                           class="btn btn-gold">
+
+                            <i class="fa-solid fa-plus me-1"></i>
+                            Add Budget
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                @if (budgets.Any())
+                {
+                    <div class="table-wrapper">
+
+                        <table class="table budget-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Category</th>
+
+                                    <th>Month</th>
+
+                                    <th>Budget</th>
+
+                                    <th>Spent</th>
+
+                                    <th>Remaining</th>
+
+                                    <th>Usage</th>
+
+                                    <th>Actions</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var budget in budgets)
+                                {
+                                    var usageClass =
+                                        budget.UsagePercentage >= 100
+                                            ? "usage-danger"
+                                            : budget.UsagePercentage >= 85
+                                                ? "usage-warning"
+                                                : "usage-safe";
+
+                                    var progressClass =
+                                        budget.UsagePercentage >= 100
+                                            ? "bg-danger"
+                                            : budget.UsagePercentage >= 85
+                                                ? "bg-warning"
+                                                : "bg-success";
+
+                                    var remainingClass =
+                                        budget.Remaining < 0
+                                            ? "remaining-negative"
+                                            : "remaining-positive";
+
+                                    <tr>
+
+                                        <td>
+                                            <span class="category-name">
+                                                @budget.CategoryName
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span class="month-text">
+                                                @budget.Month.ToString("MMMM yyyy")
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span class="money">
+                                                Rs. @budget.LimitAmount.ToString("N2")
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span class="money">
+                                                Rs. @budget.ActualSpent.ToString("N2")
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span class="money @remainingClass">
+                                                Rs. @budget.Remaining.ToString("N2")
+                                            </span>
+                                        </td>
+
+                                        <td>
+
+                                            <span class="usage-text @usageClass">
+                                                @budget.UsagePercentage.ToString("N1")%
+                                            </span>
+
+                                            <div class="progress">
+
+                                                <div class="progress-bar @progressClass"
+                                                     role="progressbar"
+                                                     style="width: @Math.Min(budget.UsagePercentage, 100)%">
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+
+                                            <div class="action-group">
+
+                                                <a asp-controller="Budgets"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@budget.BudgetId"
+                                                   class="btn btn-outline-navy btn-sm">
+
+                                                    <i class="fa-solid fa-pen"></i>
+
+                                                </a>
+
+                                                <a asp-controller="Budgets"
+                                                   asp-action="Delete"
+                                                   asp-route-id="@budget.BudgetId"
+                                                   class="btn btn-danger btn-sm">
+
+                                                    <i class="fa-solid fa-trash"></i>
+
+                                                </a>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+
+                        <h2>
+                            No Budgets Yet
+                        </h2>
+
+                        <p>
+                            Create your first monthly budget to start
+                            tracking spending against a limit.
+                        </p>
+
+                        <a asp-controller="Budgets"
+                           asp-action="Create"
+                           class="btn btn-gold">
+
+                            <i class="fa-solid fa-plus me-1"></i>
+                            Create Budget
+
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                        flex-column
+                        flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                <p>
+                    <strong>CampusCoin</strong>
+                    · Smart Student Budgeting Platform
+                </p>
+
+                <p>
+                    © 2026 CampusCoin
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

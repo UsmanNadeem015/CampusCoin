@@ -1,0 +1,1951 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Campus Coin - Student Budgeting & Expense Manager";
+}
+
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        Campus Coin - Student Budgeting & Expense Manager
+    </title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family:
+        'Plus Jakarta Sans',
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+}
+
+.fa-solid,
+.fa-regular,
+.fa-brands,
+.fa-light,
+.fa-thin,
+.fa-duotone {
+    font-family: "Font Awesome 6 Free" !important;
+}
+
+.fa-solid {
+    font-weight: 900 !important;
+}
+
+.fa-regular {
+    font-weight: 400 !important;
+}
+
+.fa-brands {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            margin: 0;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+
+            --border-color: #e2e8f0;
+        }
+
+
+        /* =========================================
+           GENERAL
+           ========================================= */
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-label {
+            color: var(--brand-gold);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .section-title {
+            color: var(--brand-navy);
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .section-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 700px;
+        }
+
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+
+        .main-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            transition:
+                padding 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .main-navbar.navbar-scrolled {
+            padding-top: 0.4rem !important;
+            padding-bottom: 0.4rem !important;
+            background: rgba(255,255,255,0.98);
+        }
+
+        .navbar-brand {
+            text-decoration: none;
+        }
+
+        .navbar-brand:hover {
+            text-decoration: none;
+        }
+
+        .main-navbar .nav-link {
+            color: var(--brand-navy) !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .main-navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--brand-gold);
+            transition:
+                width 0.2s ease,
+                left 0.2s ease;
+        }
+
+        .main-navbar .nav-link:hover,
+        .main-navbar .nav-link.active {
+            color: var(--brand-gold) !important;
+        }
+
+        .main-navbar .nav-link:hover::after,
+        .main-navbar .nav-link.active::after {
+            width: 80%;
+            left: 10%;
+        }
+
+
+        /* =========================================
+           BUTTONS
+           ========================================= */
+
+        .btn {
+            font-weight: 600;
+            transition: all 0.2s ease !important;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+            border: 1px solid var(--brand-navy) !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold) !important;
+            color: #ffffff !important;
+            border: 1px solid var(--brand-gold) !important;
+        }
+
+        .btn-gold:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            color: var(--brand-navy) !important;
+            border: 1px solid var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+
+        /* =========================================
+           HERO
+           ========================================= */
+
+        .hero-section {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 90px 0;
+            position: relative;
+            border-bottom: 1px solid #334155;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: #020617;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            padding: 7px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 3.25rem;
+            line-height: 1.15;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .hero-title span {
+            color: var(--brand-gold-light);
+        }
+
+        .hero-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .hero-points {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            color: #cbd5e1;
+            font-size: 0.8rem;
+        }
+
+        .hero-points i {
+            color: var(--brand-gold-light);
+            margin-right: 6px;
+        }
+
+
+        /* =========================================
+           HERO DASHBOARD PREVIEW
+           ========================================= */
+
+        .hero-preview {
+            background: var(--brand-navy-light);
+            border: 1px solid #475569;
+            padding: 25px;
+        }
+
+        .preview-header {
+            border-bottom: 1px solid #475569;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .preview-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .preview-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .preview-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 18px;
+            height: 100%;
+        }
+
+        .preview-card-title {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .preview-card-value {
+            color: #ffffff;
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .preview-tip {
+            margin-top: 18px;
+            padding: 15px;
+            background: #0f172a;
+            border: 1px solid var(--brand-gold);
+            color: #fbbf24;
+            font-size: 0.8rem;
+        }
+
+
+        /* =========================================
+           FEATURE CARDS
+           ========================================= */
+
+        .feature-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 28px;
+            height: 100%;
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--brand-gold);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--brand-navy);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 0;
+        }
+
+
+        /* =========================================
+           WHY CAMPUS COIN
+           ========================================= */
+
+        .why-section {
+            background: #ffffff;
+        }
+
+        .why-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .why-image {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+        }
+
+        .why-content {
+            padding: 25px;
+        }
+
+        .why-icon {
+            width: 46px;
+            height: 46px;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .why-content h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .why-content p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 0;
+        }
+
+
+        /* =========================================
+           HOW IT WORKS
+           ========================================= */
+
+        .how-section {
+            background: var(--bg-light);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .step-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            height: 100%;
+        }
+
+        .step-number {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-gold);
+            color: #ffffff;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .step-card h3 {
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .step-card p {
+            color: var(--text-muted);
+            font-size: 0.87rem;
+            margin-bottom: 0;
+        }
+
+
+        /* =========================================
+           FAQ
+           ========================================= */
+
+        .faq-section {
+            background: #ffffff;
+        }
+
+        .accordion-item {
+            border: 1px solid var(--border-color) !important;
+            margin-bottom: 12px;
+        }
+
+        .accordion-button {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--brand-navy);
+            background: #ffffff;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: rgba(217,119,6,0.08) !important;
+            color: var(--brand-gold) !important;
+            box-shadow: none !important;
+        }
+
+        .accordion-body {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+
+        footer {
+            background: var(--brand-navy);
+            color: #94a3b8;
+        }
+
+        footer h5,
+        footer h6 {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        footer a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--brand-gold-light);
+        }
+
+        .footer-brand {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+
+        /* =========================================
+           SIMPLE ANIMATIONS
+           ========================================= */
+
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition:
+                opacity 0.6s ease,
+                transform 0.6s ease;
+        }
+
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+        @@media (max-width: 991px) {
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-section {
+                padding: 70px 0;
+            }
+
+        }
+
+        @@media (max-width: 576px) {
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-padding {
+                padding: 60px 0;
+            }
+
+            .hero-points {
+                display: block;
+            }
+
+            .hero-points span {
+                display: block;
+                margin-bottom: 8px;
+            }
+
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
+
+            .reveal-element {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         NAVBAR
+         ========================================= -->
+
+    <nav class="navbar navbar-expand-lg sticky-top main-navbar"
+         id="mainNavbar">
+
+        <div class="container">
+
+            <a class="navbar-brand d-flex align-items-center gap-2"
+               asp-controller="Home"
+               asp-action="Index">
+
+                <div class="bg-dark p-2 border border-warning
+                            d-flex align-items-center justify-content-center"
+                     style="width:36px;height:36px;">
+
+                    <i class="fa-solid fa-coins text-warning"></i>
+
+                </div>
+
+                <div>
+
+                    <span class="fw-bold text-dark fs-5 d-block lh-1">
+
+                        CAMPUS<span style="color:var(--brand-gold);">
+                            COIN
+                        </span>
+
+                    </span>
+
+                    <span class="text-uppercase text-muted fw-semibold d-block"
+                          style="font-size:0.65rem;letter-spacing:0.5px;">
+
+                        Student Budget Manager
+
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMain"
+                    aria-controls="navbarMain"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse"
+                 id="navbarMain">
+
+
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link active"
+                           href="#home">
+
+                            Home
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="#features">
+
+                            Features
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="#why-campus-coin">
+
+                            Why Campus Coin
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="#how-it-works">
+
+                            How It Works
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="#faq">
+
+                            FAQ
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+<div class="d-flex align-items-center gap-2">
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="btn btn-outline-navy btn-sm px-3 py-2">
+
+                <i class="fa-solid fa-user-shield me-1"></i>
+
+                Welcome, @User.Identity.Name
+
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="btn btn-navy btn-sm px-3 py-2">
+
+                <i class="fa-solid fa-user me-1 text-warning"></i>
+
+                Welcome, @User.Identity.Name
+
+            </a>
+        }
+    }
+    else
+    {
+        <a asp-controller="Account"
+           asp-action="Login"
+           class="btn btn-outline-navy btn-sm px-3 py-2">
+
+            Student Login
+
+        </a>
+
+        <a asp-controller="Account"
+           asp-action="Register"
+           class="btn btn-navy btn-sm px-3 py-2">
+
+            <i class="fa-solid fa-user-plus me-1 text-warning"></i>
+
+            Register
+
+        </a>
+    }
+
+</div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         HERO
+         ========================================= -->
+
+    <section id="home"
+             class="hero-section">
+
+        <div class="container">
+
+            <div class="row align-items-center gy-5">
+
+
+                <div class="col-lg-6">
+
+                    <div class="hero-badge">
+
+                        <i class="fa-solid fa-shield-halved me-1"></i>
+
+                        Student-focused financial management
+
+                    </div>
+
+
+                    <h1 class="hero-title">
+
+                        Manage Your Money.
+                        <span>
+                            Understand Your Spending.
+                        </span>
+
+                    </h1>
+
+
+                    <p class="hero-description">
+
+                        Campus Coin helps students record income and expenses,
+                        organize spending into categories, set monthly budgets,
+                        receive saving tips, and understand their financial
+                        habits from one simple dashboard.
+
+                    </p>
+
+
+                    <div class="d-flex flex-column flex-sm-row gap-3">
+
+                        <a asp-controller="Account"
+                           asp-action="Register"
+                           class="btn btn-gold btn-lg px-4 py-3">
+
+                            Get Started
+
+                            
+
+                        </a>
+
+
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="btn btn-outline-light btn-lg px-4 py-3">
+
+                            Student Login
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="hero-points">
+
+                        <span>
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Manual income and expense tracking
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Monthly budgets and alerts
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="fa-solid fa-check"></i>
+
+                            No bank account linking required
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Dashboard preview -->
+
+                <div class="col-lg-6">
+
+                    <div class="hero-preview">
+
+
+                        <div class="preview-header
+                                    d-flex
+                                    justify-content-between
+                                    align-items-center">
+
+                            <div>
+
+                                <div class="preview-label">
+                                    Current Month Balance
+                                </div>
+
+                                <div class="preview-amount">
+                                    Rs. 12,500
+                                </div>
+
+                            </div>
+
+
+                            <span class="badge bg-warning text-dark">
+                                Dashboard
+                            </span>
+
+                        </div>
+
+
+                        <div class="row g-3">
+
+
+                            <div class="col-6">
+
+                                <div class="preview-card">
+
+                                    <div class="preview-card-title">
+                                        Income
+                                    </div>
+
+                                    <div class="preview-card-value">
+                                        Rs. 25,000
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-6">
+
+                                <div class="preview-card">
+
+                                    <div class="preview-card-title">
+                                        Expenses
+                                    </div>
+
+                                    <div class="preview-card-value">
+                                        Rs. 12,500
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-6">
+
+                                <div class="preview-card">
+
+                                    <div class="preview-card-title">
+                                        Top Category
+                                    </div>
+
+                                    <div class="preview-card-value">
+                                        Food
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-6">
+
+                                <div class="preview-card">
+
+                                    <div class="preview-card-title">
+                                        Budget Usage
+                                    </div>
+
+                                    <div class="preview-card-value">
+                                        65%
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="preview-tip">
+
+                            <i class="fa-solid fa-lightbulb me-2"></i>
+
+                            <strong>Saving Tip:</strong>
+
+                            Review categories where your current spending
+                            is above your recent average.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FEATURES
+         ========================================= -->
+
+    <section id="features"
+             class="section-padding bg-light">
+
+        <div class="container">
+
+
+            <div class="text-center mb-5">
+
+                <span class="section-label">
+                    Core Features
+                </span>
+
+                <h2 class="section-title mt-2">
+                    Everything You Need to Manage Student Spending
+                </h2>
+
+                <p class="section-text mx-auto mt-3">
+
+                    Campus Coin combines transaction tracking,
+                    budgets, reports and personalized guidance
+                    in one student-focused system.
+
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <!-- Transactions -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fa-solid fa-receipt"></i>
+
+                        </div>
+
+                        <h3>
+                            Income & Expense Tracking
+                        </h3>
+
+                        <p>
+
+                            Record income and expenses, assign categories,
+                            edit transactions, delete entries and keep a
+                            complete history of your spending.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Categories -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                        </div>
+
+                        <h3>
+                            Personal Categories
+                        </h3>
+
+                        <p>
+
+                            Organize your finances using available categories
+                            or create your own income and expense categories.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Budgets -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fa-solid fa-chart-column"></i>
+
+                        </div>
+
+                        <h3>
+                            Monthly Budgets
+                        </h3>
+
+                        <p>
+
+                            Set category-based monthly budgets and monitor
+                            actual spending against each limit.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Reports -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fa-solid fa-chart-pie"></i>
+
+                        </div>
+
+                        <h3>
+                            Monthly Reports
+                        </h3>
+
+                        <p>
+
+                            Review category spending, daily and weekly
+                            summaries, six-month trends and visual charts.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Saving Tips -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fa-solid fa-lightbulb"></i>
+
+                        </div>
+
+                        <h3>
+                            Personalized Saving Tips
+                        </h3>
+
+                        <p>
+
+                            Receive suggestions based on your current
+                            spending, historical averages and budget usage.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Notifications -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="fa-solid fa-bell"></i>
+
+                        </div>
+
+                        <h3>
+                            Budget Alerts
+                        </h3>
+
+                        <p>
+
+                            Get in-app notifications when spending approaches
+                            or exceeds a category's monthly budget.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         WHY CAMPUS COIN
+         ========================================= -->
+
+    <section id="why-campus-coin"
+             class="why-section section-padding">
+
+        <div class="container">
+
+
+            <div class="text-center mb-5">
+
+                <span class="section-label">
+                    Why Campus Coin
+                </span>
+
+                <h2 class="section-title mt-2">
+                    Built Around Real Student Spending
+                </h2>
+
+                <p class="section-text mx-auto mt-3">
+
+                    Student finances are often made up of allowances,
+                    part-time income, academic costs, transport,
+                    food and recurring expenses. Campus Coin keeps
+                    these details organized without requiring bank integration.
+
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <div class="col-md-4">
+
+                    <div class="why-card">
+
+                        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop"
+                             class="why-image"
+                             loading="lazy"
+                             alt="Students studying together" />
+
+
+                        <div class="why-content">
+
+                            <div class="why-icon">
+
+                                <i class="fa-solid fa-wallet"></i>
+
+                            </div>
+
+                            <h3>
+                                Keep Every Rupee Visible
+                            </h3>
+
+                            <p>
+
+                                Record everyday spending such as food,
+                                transport, academics, subscriptions
+                                and other expenses so your money does
+                                not disappear into the mysterious void
+                                known as "I only bought a few things."
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="why-card">
+
+                        <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?q=80&w=1000&auto=format&fit=crop"
+                             class="why-image"
+                             loading="lazy"
+                             alt="Student accommodation" />
+
+
+                        <div class="why-content">
+
+                            <div class="why-icon">
+
+                                <i class="fa-solid fa-building"></i>
+
+                            </div>
+
+                            <h3>
+                                Plan Monthly Expenses
+                            </h3>
+
+                            <p>
+
+                                Create category budgets for regular
+                                expenses and compare planned limits
+                                with actual spending throughout the month.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="why-card">
+
+                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86a40?q=80&w=1000&auto=format&fit=crop"
+                             class="why-image"
+                             loading="lazy"
+                             alt="Student reviewing financial information" />
+
+
+                        <div class="why-content">
+
+                            <div class="why-icon">
+
+                                <i class="fa-solid fa-chart-line"></i>
+
+                            </div>
+
+                            <h3>
+                                Learn From Your Spending
+                            </h3>
+
+                            <p>
+
+                                Reports and personalized saving tips help
+                                you identify spending patterns and understand
+                                where adjustments may help.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         HOW IT WORKS
+         ========================================= -->
+
+    <section id="how-it-works"
+             class="how-section section-padding">
+
+        <div class="container">
+
+
+            <div class="text-center mb-5">
+
+                <span class="section-label">
+                    Simple Process
+                </span>
+
+                <h2 class="section-title mt-2">
+                    How Campus Coin Works
+                </h2>
+
+            </div>
+
+
+            <div class="row g-4">
+
+
+                <div class="col-md-4">
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            1
+                        </div>
+
+                        <h3>
+                            Create Your Account
+                        </h3>
+
+                        <p>
+
+                            Register with your basic student information
+                            and set your monthly allowance and savings goal.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            2
+                        </div>
+
+                        <h3>
+                            Record Your Finances
+                        </h3>
+
+                        <p>
+
+                            Add your income and expenses, assign categories
+                            and create monthly budgets.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="step-card">
+
+                        <div class="step-number">
+                            3
+                        </div>
+
+                        <h3>
+                            Review & Improve
+                        </h3>
+
+                        <p>
+
+                            Use dashboards, reports, budget alerts and
+                            personalized saving tips to understand your
+                            spending habits.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FAQ
+         ========================================= -->
+
+    <section id="faq"
+             class="faq-section section-padding">
+
+        <div class="container">
+
+
+            <div class="text-center mb-5">
+
+                <span class="section-label">
+                    Frequently Asked Questions
+                </span>
+
+                <h2 class="section-title mt-2">
+                    Common Questions
+                </h2>
+
+            </div>
+
+
+            <div class="row justify-content-center">
+
+                <div class="col-lg-9">
+
+
+                    <div class="accordion"
+                         id="faqAccordion">
+
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq1">
+
+                                    Does Campus Coin require a bank account?
+
+                                </button>
+
+                            </h2>
+
+
+                            <div id="faq1"
+                                 class="accordion-collapse collapse show"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    No. Campus Coin is designed around
+                                    manually entered financial data and
+                                    does not require bank-account linking.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq2">
+
+                                    Can I create my own categories?
+
+                                </button>
+
+                            </h2>
+
+
+                            <div id="faq2"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Yes. Students can create, edit and
+                                    delete their own income and expense
+                                    categories.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq3">
+
+                                    Can I set budgets for different categories?
+
+                                </button>
+
+                            </h2>
+
+
+                            <div id="faq3"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Yes. You can create monthly budgets
+                                    for expense categories and compare
+                                    your budget with actual spending.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq4">
+
+                                    Does Campus Coin provide saving advice?
+
+                                </button>
+
+                            </h2>
+
+
+                            <div id="faq4"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Yes. The saving-tip engine compares
+                                    your recent spending with historical
+                                    spending and current budget usage to
+                                    generate personalized suggestions.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="accordion-item">
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#faq5">
+
+                                    Can I export my monthly reports?
+
+                                </button>
+
+                            </h2>
+
+
+                            <div id="faq5"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#faqAccordion">
+
+                                <div class="accordion-body">
+
+                                    Yes. Monthly reports can be printed or
+                                    saved as PDF and exported as a PNG image.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <footer class="py-5">
+
+        <div class="container">
+
+
+            <div class="row g-4">
+
+
+                <div class="col-lg-5">
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                        <div class="bg-dark p-2 border border-warning
+                                    d-flex align-items-center justify-content-center"
+                             style="width:34px;height:34px;">
+
+                            <i class="fa-solid fa-coins text-warning"></i>
+
+                        </div>
+
+                        <span class="footer-brand">
+
+                            CAMPUS<span style="color:var(--brand-gold);">
+                                COIN
+                            </span>
+
+                        </span>
+
+                    </div>
+
+
+                    <p class="small">
+
+                        A student-focused budgeting and expense management
+                        application for recording income, controlling
+                        spending, setting budgets and learning from
+                        personal financial habits.
+
+                    </p>
+
+                </div>
+
+
+                <div class="col-6 col-lg-3">
+
+                    <h6>
+                        Navigation
+                    </h6>
+
+                    <div class="d-flex flex-column gap-2 mt-3">
+
+                        <a href="#home">
+                            Home
+                        </a>
+
+                        <a href="#features">
+                            Features
+                        </a>
+
+                        <a href="#why-campus-coin">
+                            Why Campus Coin
+                        </a>
+
+                        <a href="#how-it-works">
+                            How It Works
+                        </a>
+
+                        <a href="#faq">
+                            FAQ
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6 col-lg-4">
+
+                    <h6>
+                        Account
+                    </h6>
+
+                    <div class="d-flex flex-column gap-2 mt-3">
+
+                        <a asp-controller="Account"
+                           asp-action="Login">
+
+                            Student Login
+
+                        </a>
+
+
+                        <a asp-controller="Account"
+                           asp-action="Register">
+
+                            Create Account
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="border-top border-secondary mt-4 pt-4">
+
+                <div class="d-flex
+                            flex-column
+                            flex-md-row
+                            justify-content-between
+                            gap-2">
+
+                    <span class="small">
+
+                        © 2026 Campus Coin. All rights reserved.
+
+                    </span>
+
+                    <span class="small">
+
+                        Student Budgeting & Expense Management
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================================
+         BOOTSTRAP JS
+         ========================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- =========================================
+         NAVBAR SCROLL
+         ========================================= -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const navbar =
+                    document.getElementById("mainNavbar");
+
+                window.addEventListener(
+                    "scroll",
+                    function () {
+
+                        if (window.scrollY > 40) {
+
+                            navbar.classList.add(
+                                "navbar-scrolled"
+                            );
+
+                        }
+                        else {
+
+                            navbar.classList.remove(
+                                "navbar-scrolled"
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                const revealElements =
+                    document.querySelectorAll(
+                        ".reveal-element"
+                    );
+
+
+                const observer =
+                    new IntersectionObserver(
+                        function (entries, observer) {
+
+                            entries.forEach(
+                                function (entry) {
+
+                                    if (entry.isIntersecting) {
+
+                                        entry.target.classList.add(
+                                            "active"
+                                        );
+
+                                        observer.unobserve(
+                                            entry.target
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        },
+                        {
+                            threshold: 0.1
+                        }
+                    );
+
+
+                revealElements.forEach(
+                    function (element) {
+
+                        observer.observe(element);
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,805 @@
+﻿@model CampusCoin.Controllers.AccountController.RegisterInput
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Create Account";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        Campus Coin - Create Account
+    </title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family:
+        'Plus Jakarta Sans',
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+}
+.fa-solid,
+.fa-regular,
+.fa-brands,
+.fa-light,
+.fa-thin,
+.fa-duotone {
+    font-family: "Font Awesome 6 Free" !important;
+}
+
+.fa-solid {
+    font-weight: 900 !important;
+}
+
+.fa-regular {
+    font-weight: 400 !important;
+}
+
+.fa-brands {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+
+        /* =========================================
+           PAGE
+           ========================================= */
+
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 15px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fafc 0%,
+                    #eef2f7 100%
+                );
+        }
+
+
+        /* =========================================
+           AUTH CARD
+           ========================================= */
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 980px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+        }
+
+
+        /* =========================================
+           LEFT SIDE
+           ========================================= */
+
+        .auth-info {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: #020617;
+            border: 1px solid var(--brand-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            color: #94a3b8;
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 5px;
+        }
+
+        .auth-info-content {
+            margin-top: 70px;
+        }
+
+        .auth-info-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            background: #020617;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .auth-info h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 20px 0 15px;
+        }
+
+        .auth-info p {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .auth-benefits {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0 0;
+        }
+
+        .auth-benefits li {
+            color: #cbd5e1;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+
+        .auth-benefits i {
+            color: var(--brand-gold-light);
+            margin-right: 8px;
+        }
+
+        .auth-footer-text {
+            color: #64748b;
+            font-size: 0.72rem;
+            margin-top: 50px;
+        }
+
+
+        /* =========================================
+           FORM SIDE
+           ========================================= */
+
+        .auth-form-area {
+            padding: 45px;
+        }
+
+        .form-heading {
+            margin-bottom: 30px;
+        }
+
+        .form-heading h2 {
+            color: var(--brand-navy);
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .form-heading p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+
+        /* =========================================
+           FORM
+           ========================================= */
+
+        .form-label {
+            color: var(--brand-navy);
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .form-control {
+            border: 1px solid #cbd5e1;
+            min-height: 46px;
+            border-radius: 0;
+            color: var(--brand-navy);
+            font-size: 0.85rem;
+            box-shadow: none !important;
+        }
+
+        .form-control:focus {
+            border-color: var(--brand-gold);
+            box-shadow:
+                0 0 0 3px rgba(217,119,6,0.12) !important;
+        }
+
+        .form-text {
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        .validation {
+            color: #dc2626;
+            font-size: 0.72rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .validation-summary {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 12px 14px;
+            font-size: 0.78rem;
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================================
+           BUTTON
+           ========================================= */
+
+        .register-btn {
+            width: 100%;
+            min-height: 48px;
+            background: var(--brand-gold) !important;
+            border: 1px solid var(--brand-gold) !important;
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+        .register-btn:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+
+        /* =========================================
+           LINKS
+           ========================================= */
+
+        .auth-link {
+            color: var(--brand-gold);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-link:hover {
+            color: var(--brand-gold-hover);
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .back-link:hover {
+            color: var(--brand-gold);
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+        @@media (max-width: 900px) {
+
+            .auth-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 650px;
+            }
+
+            .auth-info {
+                padding: 35px;
+            }
+
+            .auth-info-content {
+                margin-top: 35px;
+            }
+
+        }
+
+        @@media (max-width: 576px) {
+
+            .auth-page {
+                padding: 20px 10px;
+            }
+
+            .auth-info,
+            .auth-form-area {
+                padding: 28px 22px;
+            }
+
+            .auth-info h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-heading h2 {
+                font-size: 1.45rem;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <main class="auth-page">
+
+        <div class="auth-wrapper">
+
+
+            <!-- =====================================
+                 LEFT INFORMATION PANEL
+                 ===================================== -->
+
+            <section class="auth-info">
+
+                <div>
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="brand">
+
+                        <div class="brand-icon">
+
+                            <i class="fa-solid fa-coins"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="brand-name">
+
+                                CAMPUS<span>COIN</span>
+
+                            </div>
+
+                            <div class="brand-subtitle">
+
+                                Student Budget Manager
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                    <div class="auth-info-content">
+
+                        <span class="auth-info-badge">
+
+                            Create Your Account
+
+                        </span>
+
+
+                        <h1>
+
+                            Start Understanding
+                            Your Spending.
+
+                        </h1>
+
+
+                        <p>
+
+                            Create your Campus Coin account and
+                            organize your income, expenses, budgets,
+                            reports and saving goals in one place.
+
+                        </p>
+
+
+                        <ul class="auth-benefits">
+
+                            <li>
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Track income and expenses
+
+                            </li>
+
+
+                            <li>
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Set monthly category budgets
+
+                            </li>
+
+
+                            <li>
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Receive personalized saving tips
+
+                            </li>
+
+
+                            <li>
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Review detailed monthly reports
+
+                            </li>
+
+
+                            <li>
+
+                                <i class="fa-solid fa-check"></i>
+
+                                No bank account linking required
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+                <div class="auth-footer-text">
+
+                    © 2026 Campus Coin
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 REGISTRATION FORM
+                 ===================================== -->
+
+            <section class="auth-form-area">
+
+                <div class="form-heading">
+
+                    <h2>
+                        Create Account
+                    </h2>
+
+                    <p>
+                        Enter your information to get started.
+                    </p>
+
+                </div>
+
+
+                <form asp-controller="Account"
+                      asp-action="Register"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="validation-summary">
+                    </div>
+
+
+                    <div class="row g-3">
+
+
+                        <!-- Name -->
+
+                        <div class="col-12">
+
+                            <label asp-for="Name"
+                                   class="form-label">
+
+                                Full Name
+
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   placeholder="Enter your full name" />
+
+                            <span asp-validation-for="Name"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="col-12">
+
+                            <label asp-for="Email"
+                                   class="form-label">
+
+                                Email Address
+
+                            </label>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="you@example.com" />
+
+                            <span asp-validation-for="Email"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Password -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Password"
+                                   class="form-label">
+
+                                Password
+
+                            </label>
+
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control"
+                                   placeholder="Enter password" />
+
+                            <span asp-validation-for="Password"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Confirm -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="ConfirmPassword"
+                                   class="form-label">
+
+                                Confirm Password
+
+                            </label>
+
+                            <input asp-for="ConfirmPassword"
+                                   type="password"
+                                   class="form-control"
+                                   placeholder="Confirm password" />
+
+                            <span asp-validation-for="ConfirmPassword"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Academic Year -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="AcademicYear"
+                                   class="form-label">
+
+                                Academic Year
+
+                            </label>
+
+                            <input asp-for="AcademicYear"
+                                   class="form-control"
+                                   placeholder="e.g. 5th Semester" />
+
+                            <span asp-validation-for="AcademicYear"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Monthly Allowance -->
+
+                        <div class="col-md-6">
+
+                            <label asp-for="MonthlyAllowance"
+                                   class="form-label">
+
+                                Monthly Allowance
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    Rs.
+                                </span>
+
+                                <input asp-for="MonthlyAllowance"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       class="form-control"
+                                       placeholder="0" />
+
+                            </div>
+
+                            <span asp-validation-for="MonthlyAllowance"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Savings Goal -->
+
+                        <div class="col-12">
+
+                            <label asp-for="SavingsGoal"
+                                   class="form-label">
+
+                                Monthly Savings Goal
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    Rs.
+                                </span>
+
+                                <input asp-for="SavingsGoal"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       class="form-control"
+                                       placeholder="0" />
+
+                            </div>
+
+                            <span asp-validation-for="SavingsGoal"
+                                  class="validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Submit -->
+
+                        <div class="col-12 mt-4">
+
+                            <button type="submit"
+                                    class="btn register-btn">
+
+                                <i class="fa-solid fa-user-plus me-2"></i>
+
+                                Create Account
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+                <div class="text-center mt-4">
+
+                    <span class="text-muted small">
+
+                        Already have an account?
+
+                    </span>
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="auth-link small">
+
+                        Login
+
+                    </a>
+
+                </div>
+
+
+                <div class="text-center mt-3">
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="back-link">
+
+                        <i class="fa-solid fa-arrow-left me-1"></i>
+
+                        Back to Home
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+
+</html>

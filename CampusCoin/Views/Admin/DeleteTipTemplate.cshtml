@@ -1,0 +1,679 @@
+﻿@model CampusCoin.Domain.Entities.TipTemplate
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Delete Tip Template";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>CampusCoin - Delete Tip Template</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+            background: var(--bg-light);
+            color: var(--brand-navy);
+        }
+
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+
+        .admin-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+        }
+
+        .admin-user-icon {
+            color: var(--brand-gold);
+        }
+
+        .admin-user-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--brand-navy);
+        }
+
+        .admin-user-role {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+        }
+
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger {
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c !important;
+            border-color: #b91c1c !important;
+        }
+
+        .page-header {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 40px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: #fca5a5;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .page-content {
+            flex: 1;
+            padding: 50px 0 60px;
+        }
+
+        .delete-card {
+            max-width: 760px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #fecaca;
+            padding: 32px;
+        }
+
+        .warning-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .delete-title {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .delete-description {
+            margin: 8px 0 25px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            margin-bottom: 25px;
+            padding: 16px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+
+        .template-details {
+            margin-bottom: 28px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 15px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            min-width: 110px;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            color: var(--brand-navy);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        .detail-description {
+            max-width: 500px;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            font-size: 0.67rem;
+            font-weight: 700;
+        }
+
+        .status-active {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer {
+            padding: 24px 0;
+            background: var(--brand-navy);
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        @@media (max-width: 768px) {
+
+            .admin-user {
+                display: none;
+            }
+
+            .page-header {
+                padding: 35px 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .delete-card {
+                padding: 24px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar admin-navbar">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Administration
+                    </span>
+
+                </div>
+
+            </a>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <div class="admin-user">
+
+                    <i class="fa-solid fa-user-shield admin-user-icon"></i>
+
+                    <div>
+
+                        <span class="admin-user-name">
+                            @(User.Identity?.Name ?? "Administrator")
+                        </span>
+
+                        <span class="admin-user-role">
+                            Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <a asp-controller="Admin"
+                   asp-action="TipTemplates"
+                   class="btn btn-outline-navy btn-sm">
+
+                    <i class="fa-solid fa-arrow-left me-1"></i>
+                    Tip Templates
+
+                </a>
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post"
+                      class="d-inline">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-navy btn-sm">
+
+                        <i class="fa-solid fa-right-from-bracket me-1 text-warning"></i>
+                        Logout
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <header class="page-header">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <span class="admin-badge">
+
+                <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                Content Management
+
+            </span>
+
+            <h1 class="mt-3">
+                Delete Tip Template
+            </h1>
+
+            <p>
+                Review the template below before permanently removing it.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main class="page-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="delete-card">
+
+                <div class="warning-icon">
+                    <i class="fa-solid fa-trash-can"></i>
+                </div>
+
+                <h2 class="delete-title">
+                    Confirm Template Deletion
+                </h2>
+
+                <p class="delete-description">
+                    This action will permanently remove the selected
+                    saving-tip template.
+                </p>
+
+                <div class="warning-box">
+
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                    Make sure this template is no longer needed before
+                    continuing. Deleting it cannot be undone.
+
+                </div>
+
+
+                <div class="template-details">
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Template ID
+                        </span>
+
+                        <span class="detail-value">
+                            #@Model.TipTemplateId
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Title
+                        </span>
+
+                        <span class="detail-value">
+                            @Model.Title
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Description
+                        </span>
+
+                        <span class="detail-value detail-description">
+                            @Model.Description
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Status
+                        </span>
+
+                        <span class="detail-value">
+
+                            @if (Model.IsActive)
+                            {
+                                <span class="status-badge status-active">
+                                    <i class="fa-solid fa-check me-1"></i>
+                                    Active
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="status-badge status-inactive">
+                                    <i class="fa-solid fa-pause me-1"></i>
+                                    Inactive
+                                </span>
+                            }
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span class="detail-label">
+                            Created
+                        </span>
+
+                        <span class="detail-value">
+                            @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <form asp-controller="Admin"
+                      asp-action="DeleteTipTemplate"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.TipTemplateId" />
+
+                    <div class="form-actions">
+
+                        <a asp-controller="Admin"
+                           asp-action="TipTemplates"
+                           class="btn btn-outline-navy">
+
+                            <i class="fa-solid fa-xmark me-1"></i>
+                            Cancel
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-danger">
+
+                            <i class="fa-solid fa-trash-can me-1"></i>
+                            Delete Template
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                        flex-column
+                        flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                <p>
+                    <strong>CampusCoin Administration</strong>
+                    · Student Budgeting Platform
+                </p>
+
+                <p>
+                    © 2026 CampusCoin
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

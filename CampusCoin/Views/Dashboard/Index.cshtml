@@ -1,0 +1,1836 @@
+﻿@using CampusCoin.Domain.Enums
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Dashboard";
+
+    var recentTransactions = ViewBag.RecentTransactions
+        as List<CampusCoin.Domain.Entities.Transaction>;
+
+    var savingTips = ViewBag.SavingTips
+        as List<CampusCoin.Domain.Entities.SavingTip>;
+
+    var budgetSummary = ViewBag.BudgetSummary;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>CampusCoin - Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+            background: var(--bg-light);
+            color: var(--brand-navy);
+        }
+
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+
+        .main-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .nav-link {
+            color: var(--brand-navy) !important;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--brand-gold) !important;
+        }
+
+        /* =========================================
+           BUTTONS
+           ========================================= */
+
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold) !important;
+            border-color: var(--brand-gold) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-gold:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        /* =========================================
+           DASHBOARD HERO
+           ========================================= */
+
+        .dashboard-header {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 42px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .dashboard-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dashboard-header h1 {
+            margin: 14px 0 8px;
+            font-size: 1.9rem;
+            font-weight: 800;
+        }
+
+        .dashboard-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.84rem;
+        }
+
+        .hero-actions {
+            margin-top: 22px;
+        }
+
+        /* =========================================
+           MAIN
+           ========================================= */
+
+        .page-content {
+            flex: 1;
+            padding: 45px 0 60px;
+        }
+
+        /* =========================================
+           QUICK ACCESS
+           ========================================= */
+
+        .section-title {
+            margin: 0 0 6px;
+            color: var(--brand-navy);
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .section-description {
+            margin: 0 0 22px;
+            color: var(--text-muted);
+            font-size: 0.77rem;
+        }
+
+        .quick-access-card {
+            height: 100%;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--brand-navy);
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--brand-gold);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+            color: var(--brand-navy);
+        }
+
+        .quick-access-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+            font-size: 1rem;
+        }
+
+        .quick-access-card h3 {
+            margin: 0 0 5px;
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+
+        .quick-access-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            line-height: 1.5;
+        }
+
+        .quick-access-arrow {
+            margin-top: 14px;
+            color: var(--brand-gold);
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        /* =========================================
+           SUMMARY CARDS
+           ========================================= */
+
+        .summary-card {
+            height: 100%;
+            padding: 22px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--brand-gold);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        }
+
+        .summary-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+            font-size: 1rem;
+        }
+
+        .summary-label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .summary-value {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .income-value {
+            color: #166534;
+        }
+
+        .expense-value {
+            color: #b91c1c;
+        }
+
+        .balance-value {
+            color: var(--brand-gold);
+        }
+
+        /* =========================================
+           CONTENT PANELS
+           ========================================= */
+
+        .content-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 0.98rem;
+            font-weight: 800;
+        }
+
+        .panel-subtitle {
+            margin: 5px 0 0;
+            color: var(--text-muted);
+            font-size: 0.73rem;
+        }
+
+        /* =========================================
+           TRANSACTIONS
+           ========================================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .dashboard-table {
+            margin: 0;
+        }
+
+        .dashboard-table thead th {
+            padding: 13px 16px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .dashboard-table tbody td {
+            padding: 15px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--brand-navy);
+            font-size: 0.76rem;
+            vertical-align: middle;
+        }
+
+        .dashboard-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dashboard-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .transaction-category {
+            font-weight: 700;
+        }
+
+        .transaction-date {
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .transaction-type {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 0.62rem;
+            font-weight: 700;
+        }
+
+        .type-income {
+            background: #ecfdf5;
+            color: #166534;
+        }
+
+        .type-expense {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .transaction-amount {
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .amount-income {
+            color: #166534;
+        }
+
+        .amount-expense {
+            color: #b91c1c;
+        }
+
+        /* =========================================
+           BUDGETS
+           ========================================= */
+
+        .budget-row {
+            padding: 17px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .budget-row:last-child {
+            border-bottom: none;
+        }
+
+        .budget-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .budget-money {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+        }
+
+        .budget-values {
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .budget-progress {
+            height: 8px;
+            margin-top: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .budget-progress .progress-bar {
+            border-radius: 10px;
+        }
+
+        .remaining-good {
+            color: #166534;
+        }
+
+        .remaining-bad {
+            color: #dc2626;
+        }
+
+        /* =========================================
+           SAVING TIPS
+           ========================================= */
+
+        .tip-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tip-icon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+        }
+
+        .tip-title {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .tip-body {
+            flex: 1;
+            padding: 18px;
+        }
+
+        .tip-description {
+            margin-bottom: 14px;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+            line-height: 1.65;
+        }
+
+        .tip-saving {
+            margin-bottom: 0;
+            color: #166534;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .tip-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 18px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pin-badge {
+            color: var(--brand-gold);
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        /* =========================================
+           EMPTY STATE
+           ========================================= */
+
+        .empty-state {
+            padding: 45px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+            font-size: 1.15rem;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+        .empty-state p {
+            margin: 0 0 18px;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+        }
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+
+        footer {
+            padding: 24px 0;
+            background: var(--brand-navy);
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+        @@media (max-width: 991px) {
+
+            .navbar-nav {
+                margin-top: 10px;
+            }
+
+        }
+
+        @@media (max-width: 768px) {
+
+            .dashboard-header {
+                padding: 35px 0;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.55rem;
+            }
+
+            .dashboard-table thead th,
+            .dashboard-table tbody td {
+                padding: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =========================================
+         NAVBAR
+         ========================================= -->
+
+    <nav class="navbar navbar-expand-lg main-navbar">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Smart Student Budgeting
+                    </span>
+
+                </div>
+
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#studentNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse"
+                 id="studentNavbar">
+
+                <div class="navbar-nav mx-auto">
+
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link active">
+                        Dashboard
+                    </a>
+
+                    <a asp-controller="Transactions"
+                       asp-action="Index"
+                       class="nav-link">
+                        Transactions
+                    </a>
+
+                    <a asp-controller="Budgets"
+                       asp-action="Index"
+                       class="nav-link">
+                        Budgets
+                    </a>
+
+                    <a asp-controller="Categories"
+                       asp-action="Index"
+                       class="nav-link">
+                        Categories
+                    </a>
+
+                    <a asp-controller="SavingTips"
+                       asp-action="Index"
+                       class="nav-link">
+                        Saving Tips
+                    </a>
+
+                    <a asp-controller="Bookmarks"
+                       asp-action="Index"
+                       class="nav-link">
+                        Bookmarks
+                    </a>
+
+                    <a asp-controller="Notes"
+                       asp-action="Index"
+                       class="nav-link">
+                        Notes
+                    </a>
+
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-navy btn-sm">
+
+                        <i class="fa-solid fa-user me-1"></i>
+                        Profile
+
+                    </a>
+
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-navy btn-sm">
+
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <header class="dashboard-header">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <span class="dashboard-badge">
+
+                <i class="fa-solid fa-gauge-high me-1"></i>
+                Student Dashboard
+
+            </span>
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <h1>
+                        Welcome, @ViewBag.UserName
+                    </h1>
+
+                    <p>
+                        Manage your finances, review your activity and access your CampusCoin tools from one place.
+                    </p>
+
+                    <div class="hero-actions">
+
+                        <a asp-controller="Transactions"
+                           asp-action="Create"
+                           class="btn btn-gold">
+
+                            <i class="fa-solid fa-plus me-1"></i>
+                            Add Transaction
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="page-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+
+            <!-- =====================================
+                 QUICK ACCESS
+                 ===================================== -->
+
+            <section class="mb-5">
+
+                <div class="mb-3">
+
+                    <h2 class="section-title">
+                        Quick Access
+                    </h2>
+
+                    <p class="section-description">
+                        Jump directly to the tools and sections you use most.
+                    </p>
+
+                </div>
+
+                <div class="row g-3">
+
+
+                    <!-- Transactions -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Transactions"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+
+                            <h3>
+                                Transactions
+                            </h3>
+
+                            <p>
+                                View and manage your income and expenses.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Transactions
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Budgets -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Budgets"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+
+                            <h3>
+                                Budgets
+                            </h3>
+
+                            <p>
+                                Set limits and monitor your monthly spending.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Budgets
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Categories -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Categories"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-tags"></i>
+                            </div>
+
+                            <h3>
+                                Categories
+                            </h3>
+
+                            <p>
+                                Manage your personal income and expense categories.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Categories
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Saving Tips -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="SavingTips"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+
+                            <h3>
+                                Saving Tips
+                            </h3>
+
+                            <p>
+                                View personalized suggestions for saving money.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Saving Tips
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Bookmarks -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Bookmarks"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </div>
+
+                            <h3>
+                                Bookmarks
+                            </h3>
+
+                            <p>
+                                Quickly access your saved tips and useful content.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Bookmarks
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Notes -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Notes"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-note-sticky"></i>
+                            </div>
+
+                            <h3>
+                                Notes
+                            </h3>
+
+                            <p>
+                                Create and manage your personal financial notes.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Notes
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Notifications -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Notifications"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-bell"></i>
+                            </div>
+
+                            <h3>
+                                Notifications
+                            </h3>
+
+                            <p>
+                                Review budget alerts and other account notifications.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Notifications
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Reports -->
+
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="Reports"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-chart-column"></i>
+                            </div>
+
+                            <h3>
+                                Reports
+                            </h3>
+
+                            <p>
+                                Review your financial reports and spending insights.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open Reports
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 FINANCIAL OVERVIEW
+                 ===================================== -->
+
+            <section class="mb-5">
+
+                <div class="mb-3">
+
+                    <h2 class="section-title">
+                        Financial Overview
+                    </h2>
+
+                    <p class="section-description">
+                        A quick snapshot of your current financial activity.
+                    </p>
+
+                </div>
+
+                <div class="row g-4">
+
+
+                    <!-- Balance -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <div class="summary-card">
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="summary-icon">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+
+                                <div>
+
+                                    <span class="summary-label">
+                                        Current Balance
+                                    </span>
+
+                                    <h2 class="summary-value balance-value">
+                                        Rs. @ViewBag.Balance.ToString("N2")
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Income -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <div class="summary-card">
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="summary-icon">
+                                    <i class="fa-solid fa-arrow-trend-up"></i>
+                                </div>
+
+                                <div>
+
+                                    <span class="summary-label">
+                                        Total Income
+                                    </span>
+
+                                    <h2 class="summary-value income-value">
+                                        Rs. @ViewBag.TotalIncome.ToString("N2")
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Expenses -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <div class="summary-card">
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="summary-icon">
+                                    <i class="fa-solid fa-arrow-trend-down"></i>
+                                </div>
+
+                                <div>
+
+                                    <span class="summary-label">
+                                        Total Expenses
+                                    </span>
+
+                                    <h2 class="summary-value expense-value">
+                                        Rs. @ViewBag.TotalExpenses.ToString("N2")
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Top Category -->
+
+                    <div class="col-xl-3 col-md-6">
+
+                        <div class="summary-card">
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="summary-icon">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+
+                                <div>
+
+                                    <span class="summary-label">
+                                        Top Spending Category
+                                    </span>
+
+                                    <h2 class="summary-value">
+                                        @ViewBag.TopCategory
+                                    </h2>
+
+                                    <small class="text-muted">
+                                        Rs. @ViewBag.TopCategoryAmount.ToString("N2")
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 RECENT TRANSACTIONS + BUDGETS
+                 ===================================== -->
+
+            <div class="row g-4 mb-5">
+
+
+                <!-- RECENT TRANSACTIONS -->
+
+                <div class="col-xl-8">
+
+                    <div class="d-flex flex-column flex-md-row
+                                justify-content-between
+                                align-items-md-end
+                                gap-2
+                                mb-3">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Recent Transactions
+                            </h2>
+
+                            <p class="section-description mb-0">
+                                Your latest recorded financial activity.
+                            </p>
+
+                        </div>
+
+                        <a asp-controller="Transactions"
+                           asp-action="Index"
+                           class="btn btn-outline-navy btn-sm">
+
+                            View All Transactions
+                            <i class="fa-solid fa-arrow-right ms-1"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="content-panel">
+
+                        @if (recentTransactions != null &&
+                             recentTransactions.Count > 0)
+                        {
+
+                            <div class="table-wrapper">
+
+                                <table class="table dashboard-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>Date</th>
+                                            <th>Category</th>
+                                            <th>Description</th>
+                                            <th>Type</th>
+                                            <th>Amount</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        @foreach (var transaction in recentTransactions)
+                                        {
+
+                                            var isIncome =
+                                                transaction.TransactionType == TransactionType.Income;
+
+                                            <tr>
+
+                                                <td>
+
+                                                    <span class="transaction-date">
+                                                        @transaction.TransactionDate.ToString("dd MMM yyyy")
+                                                    </span>
+
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="transaction-category">
+                                                        @transaction.Category.Name
+                                                    </span>
+
+                                                </td>
+
+                                                <td>
+                                                    @(transaction.Description ?? "-")
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="transaction-type @(isIncome ? "type-income" : "type-expense")">
+                                                        @(isIncome ? "Income" : "Expense")
+                                                    </span>
+
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="transaction-amount @(isIncome ? "amount-income" : "amount-expense")">
+                                                        Rs. @transaction.Amount.ToString("N2")
+                                                    </span>
+
+                                                </td>
+
+                                            </tr>
+
+                                        }
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        }
+                        else
+                        {
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+
+                                <h3>
+                                    No Transactions Yet
+                                </h3>
+
+                                <p>
+                                    Start recording your income and expenses to see them here.
+                                </p>
+
+                                <a asp-controller="Transactions"
+                                   asp-action="Create"
+                                   class="btn btn-gold btn-sm">
+
+                                    <i class="fa-solid fa-plus me-1"></i>
+                                    Add Transaction
+
+                                </a>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUDGET VS ACTUAL -->
+
+                <div class="col-xl-4">
+
+                    <div class="d-flex justify-content-between align-items-end gap-2 mb-3">
+
+                        <div>
+
+                            <h2 class="section-title">
+                                Budget vs Actual
+                            </h2>
+
+                            <p class="section-description mb-0">
+                                Compare your spending with your limits.
+                            </p>
+
+                        </div>
+
+                        <a asp-controller="Budgets"
+                           asp-action="Index"
+                           class="btn btn-outline-navy btn-sm">
+
+                            View
+                            <i class="fa-solid fa-arrow-right ms-1"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="content-panel">
+
+                        @if (budgetSummary != null &&
+                             budgetSummary.Count > 0)
+                        {
+
+                            @foreach (var item in budgetSummary)
+                            {
+
+                                var percentage =
+                                    item.Budget > 0
+                                        ? Math.Min(
+                                            (decimal)(item.Actual / item.Budget * 100),
+                                            100)
+                                        : 0;
+
+                                var exceeded = item.Remaining < 0;
+
+                                <div class="budget-row">
+
+                                    <div class="d-flex justify-content-between gap-2">
+
+                                        <span class="budget-name">
+                                            @item.CategoryName
+                                        </span>
+
+                                        <span class="budget-values @(exceeded ? "remaining-bad" : "remaining-good")">
+                                            Rs. @item.Remaining.ToString("N0") left
+                                        </span>
+
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mt-1">
+
+                                        <span class="budget-money">
+                                            Rs. @item.Actual.ToString("N0")
+                                            /
+                                            Rs. @item.Budget.ToString("N0")
+                                        </span>
+
+                                    </div>
+
+                                    <div class="progress budget-progress">
+
+                                        <div class="progress-bar @(exceeded ? "bg-danger" : "bg-success")"
+                                             role="progressbar"
+                                             style="width: @percentage%">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+
+                                <h3>
+                                    No Budget Set
+                                </h3>
+
+                                <p>
+                                    Create a budget to compare planned and actual spending.
+                                </p>
+
+                                <a asp-controller="Budgets"
+                                   asp-action="Create"
+                                   class="btn btn-gold btn-sm">
+
+                                    <i class="fa-solid fa-plus me-1"></i>
+                                    Create Budget
+
+                                </a>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 SAVING TIPS
+                 ===================================== -->
+
+            <section>
+
+                <div class="d-flex flex-column flex-md-row
+                            justify-content-between
+                            align-items-md-end
+                            gap-2
+                            mb-3">
+
+                    <div>
+
+                        <h2 class="section-title">
+                            Saving Tips
+                        </h2>
+
+                        <p class="section-description mb-0">
+                            Personalized suggestions based on your spending.
+                        </p>
+
+                    </div>
+
+                    <a asp-controller="SavingTips"
+                       asp-action="Index"
+                       class="btn btn-outline-navy btn-sm">
+
+                        View All Tips
+                        <i class="fa-solid fa-arrow-right ms-1"></i>
+
+                    </a>
+
+                </div>
+
+
+                @if (savingTips != null &&
+                     savingTips.Count > 0)
+                {
+
+                    <div class="row g-4">
+
+                        @foreach (var tip in savingTips)
+                        {
+
+                            <div class="col-lg-4 col-md-6">
+
+                                <article class="tip-card">
+
+                                    <div class="tip-header">
+
+                                        <div class="tip-icon">
+                                            <i class="fa-solid fa-lightbulb"></i>
+                                        </div>
+
+                                        <div>
+
+                                            <h3 class="tip-title">
+
+                                                @tip.Title
+
+                                                @if (tip.IsPinned)
+                                                {
+                                                    <span class="ms-1">📌</span>
+                                                }
+
+                                            </h3>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="tip-body">
+
+                                        <p class="tip-description">
+                                            @tip.Description
+                                        </p>
+
+                                        @if (tip.PotentialSaving.HasValue &&
+                                             tip.PotentialSaving.Value > 0)
+                                        {
+
+                                            <p class="tip-saving">
+
+                                                <i class="fa-solid fa-piggy-bank me-1"></i>
+
+                                                Potential Saving:
+                                                Rs.
+                                                @tip.PotentialSaving.Value.ToString("N2")
+
+                                            </p>
+
+                                        }
+
+                                        @if (tip.Category != null)
+                                        {
+
+                                            <p class="text-muted small mt-2 mb-0">
+
+                                                <i class="fa-solid fa-tag me-1"></i>
+
+                                                @tip.Category.Name
+
+                                            </p>
+
+                                        }
+
+                                    </div>
+
+
+                                    <div class="tip-footer">
+
+                                        @if (tip.IsPinned)
+                                        {
+
+                                            <span class="pin-badge">
+
+                                                <i class="fa-solid fa-thumbtack me-1"></i>
+                                                Pinned
+
+                                            </span>
+
+                                        }
+                                        else
+                                        {
+
+                                            <span></span>
+
+                                        }
+
+
+                                        <div class="d-flex gap-2">
+
+                                            <form asp-controller="SavingTips"
+                                                  asp-action="TogglePin"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@tip.SavingTipId" />
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-navy btn-sm">
+
+                                                    <i class="fa-solid fa-thumbtack me-1"></i>
+
+                                                    @(tip.IsPinned ? "Unpin" : "Pin")
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <form asp-controller="SavingTips"
+                                                  asp-action="Dismiss"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@tip.SavingTipId" />
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-navy btn-sm">
+
+                                                    <i class="fa-solid fa-xmark me-1"></i>
+                                                    Dismiss
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+                }
+                else
+                {
+
+                    <div class="content-panel">
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+
+                            <h3>
+                                No Saving Tips Yet
+                            </h3>
+
+                            <p>
+                                Personalized saving suggestions will appear here when available.
+                            </p>
+
+                            <a asp-controller="SavingTips"
+                               asp-action="Index"
+                               class="btn btn-outline-navy btn-sm">
+
+                                View Saving Tips
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                        flex-column
+                        flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                <p>
+                    <strong>CampusCoin</strong>
+                    · Smart Student Budgeting Platform
+                </p>
+
+                <p>
+                    © 2026 CampusCoin
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

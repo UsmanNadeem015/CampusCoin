@@ -1,0 +1,871 @@
+﻿@model IEnumerable<CampusCoin.Domain.Entities.TipTemplate>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Tip Templates";
+    var templates = Model.ToList();
+    var totalTemplates = templates.Count;
+    var activeTemplates = templates.Count(t => t.IsActive);
+    var inactiveTemplates = templates.Count(t => !t.IsActive);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>CampusCoin - Tip Templates</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+            background: var(--bg-light);
+            color: var(--brand-navy);
+        }
+
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+
+        /* NAVBAR */
+
+        .admin-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+        }
+
+        .admin-user-icon {
+            color: var(--brand-gold);
+        }
+
+        .admin-user-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--brand-navy);
+        }
+
+        .admin-user-role {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold) !important;
+            border-color: var(--brand-gold) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-gold:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger {
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+            color: #ffffff !important;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c !important;
+            border-color: #b91c1c !important;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 40px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* MAIN */
+
+        .page-content {
+            flex: 1;
+            padding: 45px 0 60px;
+        }
+
+        /* SUMMARY CARDS */
+
+        .summary-card {
+            height: 100%;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+            font-size: 1rem;
+        }
+
+        .summary-label {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+            font-size: 0.69rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .summary-value {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        /* TABLE */
+
+        .template-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .panel-header {
+            padding: 22px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            margin: 0;
+            color: var(--brand-navy);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .panel-subtitle {
+            margin: 5px 0 0;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .template-table {
+            margin: 0;
+        }
+
+        .template-table thead th {
+            padding: 14px 18px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .template-table tbody td {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--brand-navy);
+            font-size: 0.79rem;
+            vertical-align: middle;
+        }
+
+        .template-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .template-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .template-title {
+            font-weight: 700;
+        }
+
+        .template-description {
+            max-width: 420px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            font-size: 0.67rem;
+            font-weight: 700;
+        }
+
+        .status-active {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .date-text {
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            padding: 55px 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            margin-bottom: 12px;
+            color: var(--brand-gold);
+            font-size: 2rem;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 6px;
+            color: var(--brand-navy);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 0.78rem;
+        }
+
+        /* ALERTS */
+
+        .alert {
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 24px 0;
+            background: var(--brand-navy);
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        @@media (max-width: 768px) {
+
+            .admin-user {
+                display: none;
+            }
+
+            .page-header {
+                padding: 35px 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .template-table thead th,
+            .template-table tbody td {
+                padding: 12px;
+            }
+
+            .template-description {
+                min-width: 260px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar admin-navbar">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Administration
+                    </span>
+
+                </div>
+
+            </a>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <div class="admin-user">
+
+                    <i class="fa-solid fa-user-shield admin-user-icon"></i>
+
+                    <div>
+
+                        <span class="admin-user-name">
+                            @(User.Identity?.Name ?? "Administrator")
+                        </span>
+
+                        <span class="admin-user-role">
+                            Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <a asp-controller="Admin"
+                   asp-action="Index"
+                   class="btn btn-outline-navy btn-sm">
+
+                    <i class="fa-solid fa-arrow-left me-1"></i>
+                    Dashboard
+
+                </a>
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post"
+                      class="d-inline">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-navy btn-sm">
+
+                        <i class="fa-solid fa-right-from-bracket me-1 text-warning"></i>
+                        Logout
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <header class="page-header">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <span class="admin-badge">
+
+                <i class="fa-solid fa-lightbulb me-1"></i>
+                Content Management
+
+            </span>
+
+            <h1 class="mt-3">
+                Tip Templates
+            </h1>
+
+            <p>
+                Manage the system-wide saving tips used to provide
+                guidance to CampusCoin students.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="page-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success mb-4">
+                    <i class="fa-solid fa-circle-check me-2"></i>
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger mb-4">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                    @TempData["Error"]
+                </div>
+            }
+
+
+            <!-- SUMMARY -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-lg-4">
+
+                    <div class="summary-card">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="summary-icon">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+
+                            <div>
+
+                                <span class="summary-label">
+                                    Total Templates
+                                </span>
+
+                                <h2 class="summary-value">
+                                    @totalTemplates
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-4">
+
+                    <div class="summary-card">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="summary-icon">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+
+                            <div>
+
+                                <span class="summary-label">
+                                    Active Templates
+                                </span>
+
+                                <h2 class="summary-value">
+                                    @activeTemplates
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-4">
+
+                    <div class="summary-card d-flex align-items-center justify-content-center">
+
+                        <a asp-controller="Admin"
+                           asp-action="CreateTipTemplate"
+                           class="btn btn-gold">
+
+                            <i class="fa-solid fa-plus me-1"></i>
+                            Add New Tip Template
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TEMPLATE TABLE -->
+
+            <div class="template-panel">
+
+                <div class="panel-header">
+
+                    <h2 class="panel-title">
+                        Tip Template List
+                    </h2>
+
+                    <p class="panel-subtitle">
+                        Active templates can be used by the CampusCoin
+                        guidance system.
+                    </p>
+
+                </div>
+
+
+                @if (templates.Any())
+                {
+                    <div class="table-wrapper">
+
+                        <table class="table template-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Title
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Created
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var template in templates)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            <span class="template-title">
+                                                @template.Title
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <div class="template-description">
+                                                @template.Description
+                                            </div>
+                                        </td>
+
+                                        <td>
+
+                                            @if (template.IsActive)
+                                            {
+                                                <span class="status-badge status-active">
+                                                    <i class="fa-solid fa-check me-1"></i>
+                                                    Active
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="status-badge status-inactive">
+                                                    <i class="fa-solid fa-pause me-1"></i>
+                                                    Inactive
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                        <td>
+                                            <span class="date-text">
+                                                @template.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                            </span>
+                                        </td>
+
+                                        <td>
+
+                                            <div class="action-group">
+
+                                                <a asp-controller="Admin"
+                                                   asp-action="EditTipTemplate"
+                                                   asp-route-id="@template.TipTemplateId"
+                                                   class="btn btn-sm btn-outline-navy">
+
+                                                    <i class="fa-solid fa-pen me-1"></i>
+                                                    Edit
+
+                                                </a>
+
+                                                <a asp-controller="Admin"
+                                                   asp-action="DeleteTipTemplate"
+                                                   asp-route-id="@template.TipTemplateId"
+                                                   class="btn btn-sm btn-danger">
+
+                                                    <i class="fa-solid fa-trash-can me-1"></i>
+                                                    Delete
+
+                                                </a>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-lightbulb"></i>
+
+                        <h3>
+                            No Tip Templates
+                        </h3>
+
+                        <p>
+                            Create your first system-wide saving tip template.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                        flex-column
+                        flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                <p>
+                    <strong>CampusCoin Administration</strong>
+                    · Student Budgeting Platform
+                </p>
+
+                <p>
+                    © 2026 CampusCoin
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

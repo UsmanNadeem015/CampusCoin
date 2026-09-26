@@ -1,0 +1,855 @@
+﻿@model List<CampusCoin.Domain.Entities.Notification>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Notifications";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>CampusCoin - Notifications</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --info: #2563eb;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+            background: var(--bg-light);
+            color: var(--brand-navy);
+        }
+
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+
+
+        /* =========================================
+           NAVBAR
+           ========================================= */
+
+        .main-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .nav-link {
+            color: var(--brand-navy) !important;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--brand-gold) !important;
+        }
+
+
+        /* =========================================
+           BUTTONS
+           ========================================= */
+
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold) !important;
+            border-color: var(--brand-gold) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-gold:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+
+        /* =========================================
+           PAGE HEADER
+           ========================================= */
+
+        .page-header {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 38px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .page-header h1 {
+            margin: 14px 0 8px;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.84rem;
+        }
+
+
+        /* =========================================
+           MAIN CONTENT
+           ========================================= */
+
+        .page-content {
+            flex: 1;
+            padding: 45px 0 60px;
+        }
+
+
+        /* =========================================
+           SUMMARY
+           ========================================= */
+
+        .notification-summary {
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-label {
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .summary-value {
+            margin: 4px 0 0;
+            color: var(--brand-navy);
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+
+        /* =========================================
+           NOTIFICATION CARD
+           ========================================= */
+
+        .notification-card {
+            position: relative;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            margin-bottom: 14px;
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .notification-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--brand-gold);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        }
+
+        .notification-card.unread {
+            border-left: 4px solid var(--brand-gold);
+        }
+
+        .notification-card.read {
+            opacity: 0.86;
+        }
+
+        .notification-content {
+            padding: 20px;
+        }
+
+        .notification-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .notification-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .notification-icon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            color: var(--brand-gold-light);
+            font-size: 0.95rem;
+        }
+
+        .notification-title {
+            margin: 0 0 5px;
+            color: var(--brand-navy);
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .notification-message {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+            line-height: 1.65;
+        }
+
+        .unread-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 7px;
+            padding: 4px 7px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+            font-size: 0.58rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .notification-type {
+            flex-shrink: 0;
+            padding: 5px 9px;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            font-weight: 700;
+        }
+
+        .notification-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 17px;
+            padding-top: 13px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .notification-date {
+            color: var(--text-muted);
+            font-size: 0.66rem;
+        }
+
+        .read-status {
+            color: var(--success);
+            font-size: 0.67rem;
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           EMPTY STATE
+           ========================================= */
+
+        .empty-state {
+            padding: 65px 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+            font-size: 1.2rem;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 7px;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .empty-state p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+        }
+
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+
+        footer {
+            padding: 24px 0;
+            background: var(--brand-navy);
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+        @@media (max-width: 991px) {
+
+            .navbar-nav {
+                margin-top: 10px;
+            }
+
+            .notification-top {
+                flex-direction: column;
+            }
+
+            .notification-type {
+                align-self: flex-start;
+            }
+
+        }
+
+        @@media (max-width: 576px) {
+
+            .page-header {
+                padding: 32px 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .notification-content {
+                padding: 16px;
+            }
+
+            .notification-main {
+                gap: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- =========================================
+         NAVBAR
+         ========================================= -->
+
+    <nav class="navbar navbar-expand-lg main-navbar">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Smart Student Budgeting
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#studentNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse"
+                 id="studentNavbar">
+
+                <div class="navbar-nav mx-auto">
+
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link">
+                        Dashboard
+                    </a>
+
+                    <a asp-controller="Transactions"
+                       asp-action="Index"
+                       class="nav-link">
+                        Transactions
+                    </a>
+
+                    <a asp-controller="Budgets"
+                       asp-action="Index"
+                       class="nav-link">
+                        Budgets
+                    </a>
+
+                    <a asp-controller="Categories"
+                       asp-action="Index"
+                       class="nav-link">
+                        Categories
+                    </a>
+
+                    <a asp-controller="SavingTips"
+                       asp-action="Index"
+                       class="nav-link">
+                        Saving Tips
+                    </a>
+
+                    <a asp-controller="Bookmarks"
+                       asp-action="Index"
+                       class="nav-link">
+                        Bookmarks
+                    </a>
+
+                    <a asp-controller="Notes"
+                       asp-action="Index"
+                       class="nav-link">
+                        Notes
+                    </a>
+
+                    <a asp-controller="Notifications"
+                       asp-action="Index"
+                       class="nav-link active">
+                        Notifications
+                    </a>
+
+                </div>
+
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-navy btn-sm">
+
+                        <i class="fa-solid fa-user me-1"></i>
+                        Profile
+
+                    </a>
+
+
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-navy btn-sm">
+
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <header class="page-header">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <span class="page-badge">
+
+                <i class="fa-solid fa-bell me-1"></i>
+                Notifications
+
+            </span>
+
+            <h1>
+                Notifications
+            </h1>
+
+            <p>
+                Stay up to date with your account activity, budget alerts and CampusCoin updates.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+         ========================================= -->
+
+    <main class="page-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+
+            <div class="notification-summary">
+
+                <div class="summary-label">
+                    Total Notifications
+                </div>
+
+                <div class="summary-value">
+                    @(Model?.Count ?? 0)
+                </div>
+
+            </div>
+
+
+            @if (Model == null || Model.Count == 0)
+            {
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+
+                    <h2>
+                        No Notifications
+                    </h2>
+
+                    <p>
+                        You're all caught up. New notifications will appear here when available.
+                    </p>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div>
+
+                    @foreach (var notification in Model)
+                    {
+
+                        <article class="notification-card @(notification.IsRead ? "read" : "unread")">
+
+                            <div class="notification-content">
+
+                                <div class="notification-top">
+
+                                    <div class="notification-main">
+
+                                        <div class="notification-icon">
+
+                                            <i class="fa-solid fa-bell"></i>
+
+                                        </div>
+
+                                        <div>
+
+                                            <h2 class="notification-title">
+
+                                                @notification.Title
+
+                                                @if (!notification.IsRead)
+                                                {
+                                                    <span class="unread-badge">
+
+                                                        <i class="fa-solid fa-circle"></i>
+                                                        Unread
+
+                                                    </span>
+                                                }
+
+                                            </h2>
+
+                                            <p class="notification-message">
+                                                @notification.Message
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span class="notification-type">
+                                        @notification.Type
+                                    </span>
+
+                                </div>
+
+
+                                <div class="notification-footer">
+
+                                    <span class="notification-date">
+
+                                        <i class="fa-regular fa-clock me-1"></i>
+
+                                        @notification.CreatedAt.ToLocalTime().ToString("dd MMM yyyy hh:mm tt")
+
+                                    </span>
+
+
+                                    @if (!notification.IsRead)
+                                    {
+
+                                        <form asp-action="MarkAsRead"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@notification.NotificationId" />
+
+                                            <button type="submit"
+                                                    class="btn btn-gold btn-sm">
+
+                                                <i class="fa-solid fa-check me-1"></i>
+                                                Mark as Read
+
+                                            </button>
+
+                                        </form>
+
+                                    }
+                                    else
+                                    {
+
+                                        <span class="read-status">
+
+                                            <i class="fa-solid fa-check-double me-1"></i>
+                                            Read
+
+                                        </span>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    }
+
+                </div>
+
+            }
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                        flex-column
+                        flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                <p>
+                    <strong>CampusCoin</strong>
+                    · Smart Student Budgeting Platform
+                </p>
+
+                <p>
+                    © 2026 CampusCoin
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

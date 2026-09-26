@@ -1,0 +1,781 @@
+﻿@model List<CampusCoin.Domain.Entities.Note>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "My Notes";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>CampusCoin - My Notes</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #dc2626;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+            background: var(--bg-light);
+            color: var(--brand-navy);
+        }
+
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+
+        /* NAVBAR */
+
+        .main-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--brand-gold);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .nav-link {
+            color: var(--brand-navy) !important;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--brand-gold) !important;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold) !important;
+            border-color: var(--brand-gold) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-gold:hover {
+            background: var(--brand-gold-hover) !important;
+            border-color: var(--brand-gold-hover) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            background: var(--brand-navy);
+            color: #ffffff;
+            padding: 38px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .page-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #020617;
+            border: 1px solid #475569;
+            color: var(--brand-gold-light);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .page-header h1 {
+            margin: 14px 0 8px;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.84rem;
+        }
+
+        /* CONTENT */
+
+        .page-content {
+            flex: 1;
+            padding: 45px 0 60px;
+        }
+
+        .notes-summary {
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-label {
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .summary-value {
+            margin: 4px 0 0;
+            color: var(--brand-navy);
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        /* NOTE CARDS */
+
+        .note-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .note-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--brand-gold);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+        }
+
+        .note-card-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .note-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+        }
+
+        .note-title {
+            margin: 0;
+            font-size: 0.96rem;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .note-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .note-text {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .bookmark-info {
+            margin-top: 16px;
+            padding: 9px 11px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.68rem;
+        }
+
+        .note-meta {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            line-height: 1.6;
+        }
+
+        .note-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* EMPTY */
+
+        .empty-state {
+            padding: 65px 20px;
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: var(--brand-gold);
+            font-size: 1.2rem;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 7px;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .empty-state p {
+            margin: 0 0 20px;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 24px 0;
+            background: var(--brand-navy);
+            color: #94a3b8;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        @@media (max-width: 991px) {
+
+            .navbar-nav {
+                margin-top: 10px;
+            }
+
+        }
+
+        @@media (max-width: 768px) {
+
+            .page-header {
+                padding: 32px 0;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-lg main-navbar">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
+
+                    <span class="brand-subtitle">
+                        Smart Student Budgeting
+                    </span>
+
+                </div>
+
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#studentNavbar">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse" id="studentNavbar">
+
+                <div class="navbar-nav mx-auto">
+
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link">
+                        Dashboard
+                    </a>
+
+                    <a asp-controller="Transactions"
+                       asp-action="Index"
+                       class="nav-link">
+                        Transactions
+                    </a>
+
+                    <a asp-controller="Budgets"
+                       asp-action="Index"
+                       class="nav-link">
+                        Budgets
+                    </a>
+
+                    <a asp-controller="Categories"
+                       asp-action="Index"
+                       class="nav-link">
+                        Categories
+                    </a>
+
+                    <a asp-controller="SavingTips"
+                       asp-action="Index"
+                       class="nav-link">
+                        Saving Tips
+                    </a>
+
+                    <a asp-controller="Bookmarks"
+                       asp-action="Index"
+                       class="nav-link">
+                        Bookmarks
+                    </a>
+
+                    <a asp-controller="Notes"
+                       asp-action="Index"
+                       class="nav-link active">
+                        Notes
+                    </a>
+
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-navy btn-sm">
+
+                        <i class="fa-solid fa-user me-1"></i>
+                        Profile
+
+                    </a>
+
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-navy btn-sm">
+
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HEADER -->
+
+    <header class="page-header">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <span class="page-badge">
+
+                <i class="fa-solid fa-note-sticky me-1"></i>
+                Personal Notes
+
+            </span>
+
+            <div class="row align-items-end">
+
+                <div class="col-lg-8">
+
+                    <h1>
+                        My Notes
+                    </h1>
+
+                    <p>
+                        Keep track of personal reminders, financial thoughts and useful information.
+                    </p>
+
+                </div>
+
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+
+                    <a asp-controller="Notes"
+                       asp-action="Create"
+                       class="btn btn-gold">
+
+                        <i class="fa-solid fa-plus me-1"></i>
+                        Add Note
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <main class="page-content">
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="notes-summary">
+
+                <div class="summary-label">
+                    Total Notes
+                </div>
+
+                <div class="summary-value">
+                    @Model.Count
+                </div>
+
+            </div>
+
+
+            @if (Model.Count == 0)
+            {
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        <i class="fa-solid fa-note-sticky"></i>
+                    </div>
+
+                    <h2>
+                        No Notes Yet
+                    </h2>
+
+                    <p>
+                        Create your first note to keep useful information in one place.
+                    </p>
+
+                    <a asp-controller="Notes"
+                       asp-action="Create"
+                       class="btn btn-gold">
+
+                        <i class="fa-solid fa-plus me-1"></i>
+                        Create Your First Note
+
+                    </a>
+
+                </div>
+
+            }
+            else
+            {
+
+                <div class="row g-4">
+
+                    @foreach (var note in Model)
+                    {
+
+                        <div class="col-xl-4 col-md-6">
+
+                            <article class="note-card">
+
+                                <div class="note-card-header">
+
+                                    <div class="d-flex align-items-start gap-3">
+
+                                        <div class="note-icon">
+
+                                            <i class="fa-solid fa-note-sticky"></i>
+
+                                        </div>
+
+                                        <div class="flex-grow-1">
+
+                                            <h2 class="note-title">
+
+                                                @(string.IsNullOrWhiteSpace(note.Title)
+                                                    ? "Untitled Note"
+                                                    : note.Title)
+
+                                            </h2>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="note-content">
+
+                                    <p class="note-text">
+                                        @note.Content
+                                    </p>
+
+                                    @if (note.Bookmark != null)
+                                    {
+
+                                        <div class="bookmark-info">
+
+                                            <i class="fa-solid fa-bookmark me-1"></i>
+
+                                            Attached to bookmark:
+                                            #@note.Bookmark.BookmarkId
+
+                                        </div>
+
+                                    }
+
+                                </div>
+
+
+                                <div class="note-meta">
+
+                                    <div>
+                                        <strong>Created:</strong>
+                                        @note.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                                    </div>
+
+                                    @if (note.UpdatedAt.HasValue)
+                                    {
+
+                                        <div>
+                                            <strong>Updated:</strong>
+                                            @note.UpdatedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                                        </div>
+
+                                    }
+
+                                </div>
+
+
+                                <div class="note-actions">
+
+                                    <a asp-controller="Notes"
+                                       asp-action="Edit"
+                                       asp-route-id="@note.NoteId"
+                                       class="btn btn-outline-navy btn-sm">
+
+                                        <i class="fa-solid fa-pen me-1"></i>
+                                        Edit
+
+                                    </a>
+
+                                    <form asp-controller="Notes"
+                                          asp-action="Delete"
+                                          asp-route-id="@note.NoteId"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm">
+
+                                            <i class="fa-solid fa-trash me-1"></i>
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            }
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="container-fluid px-4 px-lg-5">
+
+            <div class="d-flex
+                        flex-column
+                        flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                <p>
+                    <strong>CampusCoin</strong>
+                    · Smart Student Budgeting Platform
+                </p>
+
+                <p>
+                    © 2026 CampusCoin
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

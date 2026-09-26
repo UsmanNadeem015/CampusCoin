@@ -1,0 +1,751 @@
+﻿@using CampusCoin.Domain.Entities
+@using CampusCoin.Domain.Enums
+
+@model List<Category>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Manage Categories";
+
+    var incomeCategories = Model
+        .Where(c => c.Type == CategoryType.Income)
+        .ToList();
+
+    var expenseCategories = Model
+        .Where(c => c.Type == CategoryType.Expense)
+        .ToList();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - CampusCoin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+        :root {
+    --brand-navy: #0f172a;
+    --brand-navy-light: #1e293b;
+    --brand-gold: #d97706;
+    --brand-gold-hover: #b45309;
+    --brand-gold-light: #fbbf24;
+    --bg-light: #f8fafc;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
+/* Main navbar container */
+.main-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Brand link */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--brand-navy);
+    text-decoration: none;
+}
+
+/* Brand icon box */
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--brand-navy);
+    border: 1px solid var(--brand-gold);
+    color: var(--brand-gold-light);
+}
+
+/* Brand name text */
+.brand-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.brand-name span {
+    color: var(--brand-gold);
+}
+
+/* Brand subtitle */
+.brand-subtitle {
+    display: block;
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+/* Navigation links */
+.nav-link {
+    color: var(--brand-navy) !important;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--brand-gold) !important;
+}
+
+
+        .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 45px 20px 60px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            margin: 8px 0 0;
+            color: #64748b;
+        }
+
+        .btn-gold {
+            background: #d97706;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 18px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s ease;
+        }
+
+        .btn-gold:hover {
+            background: #b45309;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .section-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            margin-bottom: 28px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+        }
+
+        .section-header {
+            padding: 22px 25px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .section-header .count {
+            background: #f1f5f9;
+            color: #475569;
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 15px 22px;
+            text-align: left;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #64748b;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 17px 22px;
+            border-top: 1px solid #e2e8f0;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .category-name {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .income-badge {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .expense-badge {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .source-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .default-badge {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .personal-badge {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .edit-btn {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .edit-btn:hover {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-btn {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .protected-text {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 20px;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+        }
+
+        .empty-state p {
+            margin: 0;
+        }
+
+        .back-link {
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #475569;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: #0f172a;
+        }
+
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 22px 15px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+
+        @@media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .navbar-nav .nav-link {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .action-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg main-navbar">
+
+    <div class="container-fluid px-4 px-lg-5">
+
+        <a asp-controller="Dashboard"
+           asp-action="Index"
+           class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-coins"></i>
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    CAMPUS<span>COIN</span>
+                </div>
+
+                <span class="brand-subtitle">
+                    Smart Student Budgeting
+                </span>
+
+            </div>
+
+        </a>
+
+        <div class="navbar-nav mx-auto">
+
+            <a asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                Dashboard
+            </a>
+
+            <a asp-controller="Transactions" asp-action="Index" class="nav-link">
+                Transactions
+            </a>
+
+            <a asp-controller="Budgets" asp-action="Index" class="nav-link">
+                Budgets
+            </a>
+
+            <a asp-controller="Categories" asp-action="Index" class="nav-link active">
+                Categories
+            </a>
+
+            <a asp-controller="SavingTips" asp-action="Index" class="nav-link">
+                Saving Tips
+            </a>
+
+            <a asp-controller="Bookmarks" asp-action="Index" class="nav-link">
+                Bookmarks
+            </a>
+
+            <a asp-controller="Notes" asp-action="Index" class="nav-link">
+                Notes
+            </a>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <a asp-controller="Profile"
+               asp-action="Index"
+               class="btn btn-outline-navy btn-sm">
+
+                <i class="fa-solid fa-user me-1"></i>
+                Profile
+
+            </a>
+
+            <form asp-controller="Account"
+                  asp-action="Logout"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        class="btn btn-navy btn-sm">
+
+                    Logout
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</nav>
+
+    <!-- Main Content -->
+    <main class="page-wrapper">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Manage Categories</h1>
+                <p>
+                    Organize your income and expense transactions with personal categories.
+                </p>
+            </div>
+
+            <a asp-action="Create" class="btn-gold">
+                <i class="fa-solid fa-plus"></i>
+                Add Personal Category
+            </a>
+
+        </div>
+
+        <!-- Income Categories -->
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-arrow-trend-up me-2"
+                       style="color:#16a34a;"></i>
+                    Income Categories
+                </h2>
+
+                <span class="count">
+                    @incomeCategories.Count
+                </span>
+
+            </div>
+
+            @if (incomeCategories.Count == 0)
+            {
+                <div class="empty-state">
+
+                    <i class="fa-solid fa-folder-open d-block"></i>
+
+                    <p>No income categories available.</p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Category Source</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var category in incomeCategories)
+                            {
+                                <tr>
+
+                                    <td class="category-name">
+                                        @category.Name
+                                    </td>
+
+                                    <td>
+                                        <span class="type-badge income-badge">
+                                            @category.Type
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        @if (category.IsDefault)
+                                        {
+                                            <span class="source-badge default-badge">
+                                                Default
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="source-badge personal-badge">
+                                                Personal
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+
+                                        @if (!category.IsDefault)
+                                        {
+                                            <div class="action-group">
+
+                                                <a asp-action="Edit"
+                                                   asp-route-id="@category.CategoryId"
+                                                   class="action-btn edit-btn">
+
+                                                    <i class="fa-solid fa-pen"></i>
+                                                    Edit
+
+                                                </a>
+
+                                                <a asp-action="Delete"
+                                                   asp-route-id="@category.CategoryId"
+                                                   class="action-btn delete-btn">
+
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    Delete
+
+                                                </a>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="protected-text">
+                                                <i class="fa-solid fa-lock me-1"></i>
+                                                Protected
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- Expense Categories -->
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <h2>
+                    <i class="fa-solid fa-arrow-trend-down me-2"
+                       style="color:#dc2626;"></i>
+                    Expense Categories
+                </h2>
+
+                <span class="count">
+                    @expenseCategories.Count
+                </span>
+
+            </div>
+
+            @if (expenseCategories.Count == 0)
+            {
+                <div class="empty-state">
+
+                    <i class="fa-solid fa-folder-open d-block"></i>
+
+                    <p>No expense categories available.</p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Category Source</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var category in expenseCategories)
+                            {
+                                <tr>
+
+                                    <td class="category-name">
+                                        @category.Name
+                                    </td>
+
+                                    <td>
+                                        <span class="type-badge expense-badge">
+                                            @category.Type
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        @if (category.IsDefault)
+                                        {
+                                            <span class="source-badge default-badge">
+                                                Default
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="source-badge personal-badge">
+                                                Personal
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+
+                                        @if (!category.IsDefault)
+                                        {
+                                            <div class="action-group">
+
+                                                <a asp-action="Edit"
+                                                   asp-route-id="@category.CategoryId"
+                                                   class="action-btn edit-btn">
+
+                                                    <i class="fa-solid fa-pen"></i>
+                                                    Edit
+
+                                                </a>
+
+                                                <a asp-action="Delete"
+                                                   asp-route-id="@category.CategoryId"
+                                                   class="action-btn delete-btn">
+
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    Delete
+
+                                                </a>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="protected-text">
+                                                <i class="fa-solid fa-lock me-1"></i>
+                                                Protected
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+        <a asp-controller="Dashboard"
+           asp-action="Index"
+           class="back-link">
+
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Dashboard
+
+        </a>
+
+    </main>
+
+    <footer>
+        &copy; @DateTime.Now.Year CampusCoin. Student finance made simpler.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
