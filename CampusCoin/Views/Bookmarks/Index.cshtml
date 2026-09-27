@@ -83,11 +83,6 @@
             font-weight: 900 !important;
         }
 
-
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .main-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -185,11 +180,6 @@
             color: #ffffff !important;
         }
 
-
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
-
         .page-header {
             background: var(--brand-navy);
             color: #ffffff;
@@ -219,11 +209,6 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-
-
-        /* =========================================
-           MAIN CONTENT
-           ========================================= */
 
         .page-content {
             flex: 1;
@@ -264,11 +249,6 @@
             font-size: 1.55rem;
             font-weight: 800;
         }
-
-
-        /* =========================================
-           BOOKMARK CARDS
-           ========================================= */
 
         .bookmark-card {
             height: 100%;
@@ -401,11 +381,6 @@
             color: var(--brand-gold);
         }
 
-
-        /* =========================================
-           EMPTY STATE
-           ========================================= */
-
         .empty-state {
             padding: 75px 20px;
             background: #ffffff;
@@ -441,11 +416,6 @@
             line-height: 1.6;
         }
 
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             padding: 24px 0;
             background: var(--brand-navy);
@@ -461,11 +431,6 @@
         footer strong {
             color: #ffffff;
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 991px) {
 
@@ -502,16 +467,11 @@
 
 <body>
 
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar navbar-expand-lg main-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Dashboard"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -618,11 +578,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         PAGE HEADER
-         ========================================= -->
-
     <header class="page-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -646,17 +601,9 @@
 
     </header>
 
-
-    <!-- =========================================
-         MAIN CONTENT
-         ========================================= -->
-
     <main class="page-content">
 
         <div class="container-fluid px-4 px-lg-5">
-
-
-            <!-- SUMMARY -->
 
             <div class="bookmark-summary">
 
@@ -842,9 +789,7 @@
                                         <i class="fa-regular fa-calendar me-1"></i>
 
                                         Bookmarked
-                                        @bookmark.CreatedAt
-                                            .ToLocalTime()
-                                            .ToString("dd MMM yyyy")
+                                        @bookmark.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
 
                                     </span>
 
@@ -886,11 +831,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 

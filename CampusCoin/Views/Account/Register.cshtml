@@ -40,40 +40,42 @@
 
     <style>
 
-* {
-    box-sizing: border-box;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-body {
-    font-family:
-        'Plus Jakarta Sans',
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        sans-serif;
-}
-.fa-solid,
-.fa-regular,
-.fa-brands,
-.fa-light,
-.fa-thin,
-.fa-duotone {
-    font-family: "Font Awesome 6 Free" !important;
-}
+        body {
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+        }
 
-.fa-solid {
-    font-weight: 900 !important;
-}
+        .fa-solid,
+        .fa-regular,
+        .fa-brands,
+        .fa-light,
+        .fa-thin,
+        .fa-duotone {
+            font-family: "Font Awesome 6 Free" !important;
+        }
 
-.fa-regular {
-    font-weight: 400 !important;
-}
+        .fa-solid {
+            font-weight: 900 !important;
+        }
 
-.fa-brands {
-    font-family: "Font Awesome 6 Brands" !important;
-    font-weight: 400 !important;
-}
+        .fa-regular {
+            font-weight: 400 !important;
+        }
+
+        .fa-brands {
+            font-family: "Font Awesome 6 Brands" !important;
+            font-weight: 400 !important;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
@@ -102,6 +104,7 @@ body {
             align-items: center;
             justify-content: center;
             padding: 40px 15px;
+
             background:
                 linear-gradient(
                     135deg,
@@ -112,7 +115,7 @@ body {
 
 
         /* =========================================
-           AUTH CARD
+           CARD
            ========================================= */
 
         .auth-wrapper {
@@ -121,7 +124,7 @@ body {
             background: #ffffff;
             border: 1px solid var(--border-color);
             display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
+            grid-template-columns: 0.95fr 1.05fr;
         }
 
 
@@ -233,6 +236,9 @@ body {
 
         .auth-form-area {
             padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .form-heading {
@@ -298,6 +304,34 @@ body {
             padding: 12px 14px;
             font-size: 0.78rem;
             margin-bottom: 20px;
+        }
+
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .validation-summary li {
+            margin: 0;
+        }
+
+        .validation-summary li:not(:last-child) {
+            margin-bottom: 4px;
+        }
+
+
+        /* =========================================
+           INPUT GROUP (Rs.)
+           ========================================= */
+
+        .input-group-text {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 0;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 700;
         }
 
 
@@ -396,7 +430,6 @@ body {
     <main class="auth-page">
 
         <div class="auth-wrapper">
-
 
             <!-- =====================================
                  LEFT INFORMATION PANEL
@@ -524,7 +557,7 @@ body {
 
 
             <!-- =====================================
-                 REGISTRATION FORM
+                 REGISTER FORM
                  ===================================== -->
 
             <section class="auth-form-area">
@@ -549,9 +582,12 @@ body {
                     @Html.AntiForgeryToken()
 
 
-                    <div asp-validation-summary="ModelOnly"
-                         class="validation-summary">
-                    </div>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All"
+                             class="validation-summary">
+                        </div>
+                    }
 
 
                     <div class="row g-3">

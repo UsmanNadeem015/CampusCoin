@@ -40,63 +40,59 @@
 
     <style>
 
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family:
-        'Plus Jakarta Sans',
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        sans-serif;
-}
-
-.fa-solid,
-.fa-regular,
-.fa-brands,
-.fa-light,
-.fa-thin,
-.fa-duotone {
-    font-family: "Font Awesome 6 Free" !important;
-}
-
-.fa-solid {
-    font-weight: 900 !important;
-}
-
-.fa-regular {
-    font-weight: 400 !important;
-}
-
-.fa-brands {
-    font-family: "Font Awesome 6 Brands" !important;
-    font-weight: 400 !important;
-}
-
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
-            margin: 0;
-            min-height: 100vh;
-            background: #f8fafc;
-            color: #0f172a;
+            font-family:
+                'Plus Jakarta Sans',
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
         }
-
-        :root {
-            --brand-navy: #0f172a;
-            --brand-navy-light: #1e293b;
-            --brand-gold: #d97706;
-            --brand-gold-hover: #b45309;
-            --brand-gold-light: #fbbf24;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
+        
+        .fa-solid,
+        .fa-regular,
+        .fa-brands,
+        .fa-light,
+        .fa-thin,
+        .fa-duotone {
+            font-family: "Font Awesome 6 Free" !important;
         }
+        
+        .fa-solid {
+            font-weight: 900 !important;
+        }
+        
+        .fa-regular {
+            font-weight: 400 !important;
+        }
+        
+        .fa-brands {
+            font-family: "Font Awesome 6 Brands" !important;
+            font-weight: 400 !important;
+        }
+        
+                body {
+                    margin: 0;
+                    min-height: 100vh;
+                    background: #f8fafc;
+                    color: #0f172a;
+                }
+        
+                :root {
+                    --brand-navy: #0f172a;
+                    --brand-navy-light: #1e293b;
+                    --brand-gold: #d97706;
+                    --brand-gold-hover: #b45309;
+                    --brand-gold-light: #fbbf24;
+                    --text-muted: #64748b;
+                    --border-color: #e2e8f0;
+                }
 
-
-        /* =========================================
-           PAGE
-           ========================================= */
 
         .auth-page {
             min-height: 100vh;
@@ -113,11 +109,6 @@ body {
                 );
         }
 
-
-        /* =========================================
-           CARD
-           ========================================= */
-
         .auth-wrapper {
             width: 100%;
             max-width: 900px;
@@ -127,10 +118,6 @@ body {
             grid-template-columns: 0.95fr 1.05fr;
         }
 
-
-        /* =========================================
-           LEFT SIDE
-           ========================================= */
 
         .auth-info {
             background: var(--brand-navy);
@@ -229,11 +216,6 @@ body {
             margin-top: 50px;
         }
 
-
-        /* =========================================
-           FORM SIDE
-           ========================================= */
-
         .auth-form-area {
             padding: 45px;
             display: flex;
@@ -257,11 +239,6 @@ body {
             font-size: 0.85rem;
             margin: 0;
         }
-
-
-        /* =========================================
-           FORM
-           ========================================= */
 
         .form-label {
             color: var(--brand-navy);
@@ -301,11 +278,6 @@ body {
             margin-bottom: 20px;
         }
 
-
-        /* =========================================
-           CHECKBOX
-           ========================================= */
-
         .remember-row {
             display: flex;
             justify-content: space-between;
@@ -330,11 +302,6 @@ body {
             accent-color: var(--brand-gold);
         }
 
-
-        /* =========================================
-           BUTTON
-           ========================================= */
-
         .login-btn {
             width: 100%;
             min-height: 48px;
@@ -349,10 +316,6 @@ body {
             border-color: var(--brand-gold-hover) !important;
         }
 
-
-        /* =========================================
-           LINKS
-           ========================================= */
 
         .auth-link {
             color: var(--brand-gold);
@@ -373,11 +336,6 @@ body {
         .back-link:hover {
             color: var(--brand-gold);
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 900px) {
 
@@ -422,6 +380,20 @@ body {
 
         }
 
+    .validation-summary ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    }
+    
+    .validation-summary li {
+        margin: 0;
+    }
+    
+    .validation-summary li:not(:last-child) {
+        margin-bottom: 4px;
+    }
+
     </style>
 
 </head>
@@ -433,11 +405,6 @@ body {
     <main class="auth-page">
 
         <div class="auth-wrapper">
-
-
-            <!-- =====================================
-                 LEFT INFORMATION PANEL
-                 ===================================== -->
 
             <section class="auth-info">
 
@@ -559,11 +526,6 @@ body {
 
             </section>
 
-
-            <!-- =====================================
-                 LOGIN FORM
-                 ===================================== -->
-
             <section class="auth-form-area">
 
                 <div class="form-heading">
@@ -591,9 +553,12 @@ body {
                            value="@ViewBag.ReturnUrl" />
 
 
-                    <div asp-validation-summary="ModelOnly"
-                         class="validation-summary">
-                    </div>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="ModelOnly"
+                             class="validation-summary">
+                        </div>
+                    }
 
 
                     <div class="mb-3">

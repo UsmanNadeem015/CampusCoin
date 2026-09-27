@@ -86,11 +86,6 @@
             font-weight: 900 !important;
         }
 
-
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .main-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -145,11 +140,6 @@
             color: var(--brand-gold) !important;
         }
 
-
-        /* =========================================
-           BUTTONS
-           ========================================= */
-
         .btn {
             font-weight: 700;
             border-radius: 4px;
@@ -193,11 +183,6 @@
             color: #ffffff !important;
         }
 
-
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
-
         .page-header {
             background: var(--brand-navy);
             color: #ffffff;
@@ -229,20 +214,10 @@
             font-size: 0.84rem;
         }
 
-
-        /* =========================================
-           MAIN CONTENT
-           ========================================= */
-
         .page-content {
             flex: 1;
             padding: 45px 0 60px;
         }
-
-
-        /* =========================================
-           SUMMARY
-           ========================================= */
 
         .notification-summary {
             margin-bottom: 28px;
@@ -265,11 +240,6 @@
             font-size: 1.25rem;
             font-weight: 800;
         }
-
-
-        /* =========================================
-           NOTIFICATION CARD
-           ========================================= */
 
         .notification-card {
             position: relative;
@@ -387,11 +357,6 @@
             font-weight: 700;
         }
 
-
-        /* =========================================
-           EMPTY STATE
-           ========================================= */
-
         .empty-state {
             padding: 65px 20px;
             background: #ffffff;
@@ -424,11 +389,6 @@
             font-size: 0.76rem;
         }
 
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             padding: 24px 0;
             background: var(--brand-navy);
@@ -444,11 +404,6 @@
         footer strong {
             color: #ffffff;
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 991px) {
 
@@ -492,16 +447,11 @@
 
 <body>
 
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar navbar-expand-lg main-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Dashboard"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -627,11 +577,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         HEADER
-         ========================================= -->
-
     <header class="page-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -654,11 +599,6 @@
         </div>
 
     </header>
-
-
-    <!-- =========================================
-         MAIN CONTENT
-         ========================================= -->
 
     <main class="page-content">
 
@@ -816,11 +756,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 

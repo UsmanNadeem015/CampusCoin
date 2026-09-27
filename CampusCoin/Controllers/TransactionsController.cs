@@ -44,7 +44,6 @@ public class TransactionsController : Controller
         return View(transactions);
     }
 
-    // Create start
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -130,7 +129,7 @@ public class TransactionsController : Controller
 
         await _context.SaveChangesAsync();
 
-        await CheckBudgetAlertAsync(
+        await RefreshBudgetNotificationAsync(
             userId,
             input.CategoryId,
             input.TransactionDate
@@ -138,11 +137,7 @@ public class TransactionsController : Controller
 
         return RedirectToAction(nameof(Index));
     }
-    // Create end
-
-    // Ai suggestions start
-    // AI category suggestion start
-
+   
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SuggestCategory(
@@ -175,7 +170,6 @@ public class TransactionsController : Controller
             });
         }
 
-        // Only categories this student is actually allowed to use.
         var categories = await _context.Categories
             .Where(c =>
                 c.IsDefault ||
@@ -229,12 +223,6 @@ public class TransactionsController : Controller
             categoryName = suggestedCategory.Name
         });
     }
-
-    // AI category suggestion end
-    // Ai suggestions end
-
-
-    // Edit start
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -269,15 +257,13 @@ public class TransactionsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Transaction input)
+    public async Task<IActionResult> Edit(
+        int id,
+        Transaction input)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (userIdClaim == null ||
-            !int.TryParse(userIdClaim.Value, out int userId))
-        {
-            return RedirectToAction("Login", "Account");
-        }
+        var userId = int.Parse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier)!
+        );
 
         var transaction = await _context.Transactions
             .FirstOrDefaultAsync(t =>
@@ -289,24 +275,20 @@ public class TransactionsController : Controller
             return NotFound();
         }
 
-        var category = await _context.Categories
-            .FirstOrDefaultAsync(c =>
-                c.CategoryId == input.CategoryId &&
-                (c.IsDefault || c.UserId == userId));
+        var oldCategoryId = transaction.CategoryId;
+        var oldTransactionDate = transaction.TransactionDate;
 
-        if (category == null)
+        var validCategory = await _context.Categories
+            .AnyAsync(c =>
+                (c.UserId == null || c.UserId == userId) &&
+                c.CategoryId == input.CategoryId &&
+                (int)c.Type == (int)input.TransactionType);
+
+        if (!validCategory)
         {
             ModelState.AddModelError(
                 "CategoryId",
-                "Please select a valid category."
-            );
-        }
-        else if ((int)category.Type != (int)input.TransactionType)
-        {
-            ModelState.AddModelError(
-                "CategoryId",
-                "The selected category does not match the transaction type."
-            );
+                "The selected category is not valid for this transaction type.");
         }
 
         if (!ModelState.IsValid)
@@ -326,18 +308,22 @@ public class TransactionsController : Controller
         transaction.Description = input.Description;
         transaction.TransactionDate = input.TransactionDate;
         transaction.IsRecurring = input.IsRecurring;
-
-        transaction.NextRecurringDate = input.IsRecurring
-            ? input.TransactionDate.AddMonths(1)
-            : null;
+        transaction.NextRecurringDate =
+            input.IsRecurring
+                ? input.NextRecurringDate
+                : null;
 
         await _context.SaveChangesAsync();
 
-        await CheckBudgetAlertAsync(
+        await RefreshBudgetNotificationAsync(
+            userId,
+            oldCategoryId,
+            oldTransactionDate);
+
+        await RefreshBudgetNotificationAsync(
             userId,
             transaction.CategoryId,
-            transaction.TransactionDate
-        );
+            transaction.TransactionDate);
 
         return RedirectToAction(nameof(Index));
     }
@@ -391,9 +377,17 @@ public class TransactionsController : Controller
             return NotFound();
         }
 
+        var categoryId = transaction.CategoryId;
+        var transactionDate = transaction.TransactionDate;
+
         _context.Transactions.Remove(transaction);
 
         await _context.SaveChangesAsync();
+
+        await RefreshBudgetNotificationAsync(
+            userId,
+            categoryId,
+            transactionDate);
 
         return RedirectToAction(nameof(Index));
     }
@@ -426,16 +420,15 @@ public class TransactionsController : Controller
     }
     // Details end
 
-    private async Task CheckBudgetAlertAsync(
-    int userId,
-    int categoryId,
-    DateTime transactionDate)
+    private async Task RefreshBudgetNotificationAsync(
+        int userId,
+        int categoryId,
+        DateTime transactionDate)
     {
         var monthStart = new DateTime(
             transactionDate.Year,
             transactionDate.Month,
-            1
-        );
+            1);
 
         var nextMonthStart = monthStart.AddMonths(1);
 
@@ -444,8 +437,7 @@ public class TransactionsController : Controller
             .FirstOrDefaultAsync(b =>
                 b.UserId == userId &&
                 b.CategoryId == categoryId &&
-                b.Month == monthStart
-            );
+                b.Month == monthStart);
 
         if (budget == null)
             return;
@@ -456,8 +448,7 @@ public class TransactionsController : Controller
                 t.CategoryId == categoryId &&
                 t.TransactionType == TransactionType.Expense &&
                 t.TransactionDate >= monthStart &&
-                t.TransactionDate < nextMonthStart
-            )
+                t.TransactionDate < nextMonthStart)
             .SumAsync(t => (decimal?)t.Amount) ?? 0m;
 
         if (budget.LimitAmount <= 0)
@@ -477,17 +468,41 @@ public class TransactionsController : Controller
             notificationType = NotificationType.BudgetNearLimit;
         }
 
-        if (notificationType == null)
-            return;
+        var categoryName = budget.Category?.Name ?? "Category";
 
-        string categoryName = budget.Category?.Name ?? "Category";
+        var nearLimitTitle =
+            $"Budget Near Limit - {categoryName} - {monthStart:MMMM yyyy}";
+
+        var exceededTitle =
+            $"Budget Exceeded - {categoryName} - {monthStart:MMMM yyyy}";
+
+        // No alert is needed anymore.
+        // Remove any old notification for this budget.
+        if (notificationType == null)
+        {
+            var oldNotifications = await _context.Notifications
+                .Where(n =>
+                    n.UserId == userId &&
+                    (n.Title == nearLimitTitle ||
+                     n.Title == exceededTitle))
+                .ToListAsync();
+
+            if (oldNotifications.Count > 0)
+            {
+                _context.Notifications.RemoveRange(oldNotifications);
+
+                await _context.SaveChangesAsync();
+            }
+
+            return;
+        }
 
         string title;
         string message;
 
         if (notificationType == NotificationType.BudgetExceeded)
         {
-            title = $"Budget Exceeded - {categoryName} - {monthStart:MMMM yyyy}";
+            title = exceededTitle;
 
             message =
                 $"Your {categoryName} budget has been exceeded. " +
@@ -496,7 +511,7 @@ public class TransactionsController : Controller
         }
         else
         {
-            title = $"Budget Near Limit - {categoryName} - {monthStart:MMMM yyyy}";
+            title = nearLimitTitle;
 
             message =
                 $"Your {categoryName} budget is at {usagePercentage:N1}%. " +
@@ -504,31 +519,47 @@ public class TransactionsController : Controller
                 $"out of Rs. {budget.LimitAmount:N2}.";
         }
 
-        bool alreadyExists = await _context.Notifications
-            .AnyAsync(n =>
+        var oppositeTitle =
+            notificationType == NotificationType.BudgetExceeded
+                ? nearLimitTitle
+                : exceededTitle;
+
+        var oppositeNotifications = await _context.Notifications
+            .Where(n =>
                 n.UserId == userId &&
-                n.Type == notificationType.Value &&
-                n.Title == title
-            );
+                n.Title == oppositeTitle)
+            .ToListAsync();
 
-        if (alreadyExists)
-            return;
-
-        var notification = new Notification
+        if (oppositeNotifications.Count > 0)
         {
-            UserId = userId,
-            Title = title,
-            Message = message,
-            Type = notificationType.Value,
-            IsRead = false,
-            CreatedAt = DateTime.UtcNow
-        };
+            _context.Notifications.RemoveRange(oppositeNotifications);
+        }
 
-        _context.Notifications.Add(notification);
+        var existingNotification = await _context.Notifications
+            .FirstOrDefaultAsync(n =>
+                n.UserId == userId &&
+                n.Title == title);
+
+        if (existingNotification == null)
+        {
+            _context.Notifications.Add(new Notification
+            {
+                UserId = userId,
+                Title = title,
+                Message = message,
+                Type = notificationType.Value,
+                IsRead = false,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+        else
+        {
+            existingNotification.Message = message;
+            existingNotification.IsRead = false;
+        }
 
         await _context.SaveChangesAsync();
     }
-
     public class CategorySuggestionRequest
     {
         public string Description { get; set; } = string.Empty;

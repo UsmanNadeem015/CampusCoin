@@ -93,10 +93,6 @@
             font-weight: 900 !important;
         }
 
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .main-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -151,10 +147,6 @@
             color: var(--brand-gold) !important;
         }
 
-        /* =========================================
-           BUTTONS
-           ========================================= */
-
         .btn {
             font-weight: 700;
             border-radius: 4px;
@@ -198,10 +190,6 @@
             color: #ffffff !important;
         }
 
-        /* =========================================
-           DASHBOARD HERO
-           ========================================= */
-
         .dashboard-header {
             background: var(--brand-navy);
             color: #ffffff;
@@ -237,18 +225,10 @@
             margin-top: 22px;
         }
 
-        /* =========================================
-           MAIN
-           ========================================= */
-
         .page-content {
             flex: 1;
             padding: 45px 0 60px;
         }
-
-        /* =========================================
-           QUICK ACCESS
-           ========================================= */
 
         .section-title {
             margin: 0 0 6px;
@@ -313,10 +293,6 @@
             font-weight: 800;
         }
 
-        /* =========================================
-           SUMMARY CARDS
-           ========================================= */
-
         .summary-card {
             height: 100%;
             padding: 22px;
@@ -371,10 +347,6 @@
             color: var(--brand-gold);
         }
 
-        /* =========================================
-           CONTENT PANELS
-           ========================================= */
-
         .content-panel {
             background: #ffffff;
             border: 1px solid var(--border-color);
@@ -397,10 +369,6 @@
             color: var(--text-muted);
             font-size: 0.73rem;
         }
-
-        /* =========================================
-           TRANSACTIONS
-           ========================================= */
 
         .table-wrapper {
             overflow-x: auto;
@@ -477,10 +445,6 @@
             color: #b91c1c;
         }
 
-        /* =========================================
-           BUDGETS
-           ========================================= */
-
         .budget-row {
             padding: 17px 20px;
             border-bottom: 1px solid var(--border-color);
@@ -523,10 +487,6 @@
         .remaining-bad {
             color: #dc2626;
         }
-
-        /* =========================================
-           SAVING TIPS
-           ========================================= */
 
         .tip-card {
             height: 100%;
@@ -597,10 +557,6 @@
             font-weight: 700;
         }
 
-        /* =========================================
-           EMPTY STATE
-           ========================================= */
-
         .empty-state {
             padding: 45px 20px;
             text-align: center;
@@ -631,10 +587,6 @@
             font-size: 0.76rem;
         }
 
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             padding: 24px 0;
             background: var(--brand-navy);
@@ -650,10 +602,6 @@
         footer strong {
             color: #ffffff;
         }
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 991px) {
 
@@ -685,10 +633,6 @@
 </head>
 
 <body>
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
 
     <nav class="navbar navbar-expand-lg main-navbar">
 
@@ -810,11 +754,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         HEADER
-         ========================================= -->
-
     <header class="dashboard-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -859,19 +798,9 @@
 
     </header>
 
-
-    <!-- =========================================
-         MAIN CONTENT
-         ========================================= -->
-
     <main class="page-content">
 
         <div class="container-fluid px-4 px-lg-5">
-
-
-            <!-- =====================================
-                 QUICK ACCESS
-                 ===================================== -->
 
             <section class="mb-5">
 
@@ -888,9 +817,6 @@
                 </div>
 
                 <div class="row g-3">
-
-
-                    <!-- Transactions -->
 
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
@@ -919,9 +845,6 @@
 
                     </div>
 
-
-                    <!-- Budgets -->
-
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
                         <a asp-controller="Budgets"
@@ -948,9 +871,6 @@
                         </a>
 
                     </div>
-
-
-                    <!-- Categories -->
 
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
@@ -979,9 +899,6 @@
 
                     </div>
 
-
-                    <!-- Saving Tips -->
-
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
                         <a asp-controller="SavingTips"
@@ -1008,9 +925,6 @@
                         </a>
 
                     </div>
-
-
-                    <!-- Bookmarks -->
 
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
@@ -1039,9 +953,6 @@
 
                     </div>
 
-
-                    <!-- Notes -->
-
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
                         <a asp-controller="Notes"
@@ -1068,9 +979,6 @@
                         </a>
 
                     </div>
-
-
-                    <!-- Notifications -->
 
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
@@ -1099,9 +1007,6 @@
 
                     </div>
 
-
-                    <!-- Reports -->
-
                     <div class="col-xl-3 col-lg-4 col-md-6">
 
                         <a asp-controller="Reports"
@@ -1129,14 +1034,36 @@
 
                     </div>
 
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <a asp-controller="AIInsights"
+                           asp-action="Index"
+                           class="quick-access-card">
+
+                            <div class="quick-access-icon">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+
+                            <h3>
+                                AI Insights
+                            </h3>
+
+                            <p>
+                                Get AI-generated spending summaries and personalized advice.
+                            </p>
+
+                            <div class="quick-access-arrow">
+                                Open AI Insights
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </div>
+
+                        </a>
+
+                    </div>
+
                 </div>
 
             </section>
-
-
-            <!-- =====================================
-                 FINANCIAL OVERVIEW
-                 ===================================== -->
 
             <section class="mb-5">
 
@@ -1153,9 +1080,6 @@
                 </div>
 
                 <div class="row g-4">
-
-
-                    <!-- Balance -->
 
                     <div class="col-xl-3 col-md-6">
 
@@ -1185,9 +1109,6 @@
 
                     </div>
 
-
-                    <!-- Income -->
-
                     <div class="col-xl-3 col-md-6">
 
                         <div class="summary-card">
@@ -1216,9 +1137,6 @@
 
                     </div>
 
-
-                    <!-- Expenses -->
-
                     <div class="col-xl-3 col-md-6">
 
                         <div class="summary-card">
@@ -1246,9 +1164,6 @@
                         </div>
 
                     </div>
-
-
-                    <!-- Top Category -->
 
                     <div class="col-xl-3 col-md-6">
 
@@ -1286,15 +1201,7 @@
 
             </section>
 
-
-            <!-- =====================================
-                 RECENT TRANSACTIONS + BUDGETS
-                 ===================================== -->
-
             <div class="row g-4 mb-5">
-
-
-                <!-- RECENT TRANSACTIONS -->
 
                 <div class="col-xl-8">
 
@@ -1443,9 +1350,6 @@
 
                 </div>
 
-
-                <!-- BUDGET VS ACTUAL -->
-
                 <div class="col-xl-4">
 
                     <div class="d-flex justify-content-between align-items-end gap-2 mb-3">
@@ -1565,11 +1469,6 @@
                 </div>
 
             </div>
-
-
-            <!-- =====================================
-                 SAVING TIPS
-                 ===================================== -->
 
             <section>
 
@@ -1797,11 +1696,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 

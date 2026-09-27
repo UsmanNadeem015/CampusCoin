@@ -84,10 +84,6 @@
         }
 
 
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .admin-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -156,11 +152,6 @@
             font-size: 0.65rem;
         }
 
-
-        /* =========================================
-           BUTTONS
-           ========================================= */
-
         .btn {
             font-weight: 700;
             border-radius: 4px;
@@ -204,11 +195,6 @@
             color: #ffffff !important;
         }
 
-
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
-
         .page-header {
             background: var(--brand-navy);
             color: #ffffff;
@@ -239,11 +225,6 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-
-
-        /* =========================================
-           MAIN CONTENT
-           ========================================= */
 
         .page-content {
             flex: 1;
@@ -321,6 +302,20 @@
             font-size: 0.78rem;
         }
 
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .validation-summary li {
+            margin: 0;
+        }
+
+        .validation-summary li:not(:last-child) {
+            margin-bottom: 4px;
+        }
+
         .field-validation-error {
             display: block;
             margin-top: 5px;
@@ -337,11 +332,6 @@
             border-top: 1px solid var(--border-color);
         }
 
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             padding: 24px 0;
             background: var(--brand-navy);
@@ -357,11 +347,6 @@
         footer strong {
             color: #ffffff;
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 768px) {
 
@@ -398,16 +383,11 @@
 
 <body>
 
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar admin-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Admin"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -484,11 +464,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         PAGE HEADER
-         ========================================= -->
-
     <header class="page-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -512,11 +487,6 @@
 
     </header>
 
-
-    <!-- =========================================
-         MAIN
-         ========================================= -->
-
     <main class="page-content">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -539,16 +509,8 @@
 
                 @if (!ViewData.ModelState.IsValid)
                 {
-                    <div class="validation-summary">
-
-                        <strong>
-                            Please correct the following:
-                        </strong>
-
-                        <div class="mt-2">
-                            <div asp-validation-summary="All"></div>
-                        </div>
-
+                    <div asp-validation-summary="All"
+                         class="validation-summary">
                     </div>
                 }
 
@@ -558,9 +520,6 @@
                       method="post">
 
                     @Html.AntiForgeryToken()
-
-
-                    <!-- CATEGORY NAME -->
 
                     <div class="mb-4">
 
@@ -575,18 +534,11 @@
                                class="form-control"
                                placeholder="e.g. Books & Stationery" />
 
-                        <span asp-validation-for="Name"
-                              class="field-validation-error">
-                        </span>
-
                         <div class="field-help">
                             Use a clear name that students will easily recognize.
                         </div>
 
                     </div>
-
-
-                    <!-- CATEGORY TYPE -->
 
                     <div class="mb-4">
 
@@ -603,14 +555,7 @@
 
                         </select>
 
-                        <span asp-validation-for="Type"
-                              class="field-validation-error">
-                        </span>
-
                     </div>
-
-
-                    <!-- ACTIONS -->
 
                     <div class="form-actions">
 
@@ -640,11 +585,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 

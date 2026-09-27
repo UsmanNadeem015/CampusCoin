@@ -89,10 +89,6 @@
             font-weight: 900 !important;
         }
 
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .admin-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -161,10 +157,6 @@
             font-size: 0.65rem;
         }
 
-        /* =========================================
-           BUTTONS
-           ========================================= */
-
         .btn {
             font-weight: 700;
             border-radius: 4px;
@@ -219,9 +211,6 @@
             border-color: #15803d !important;
         }
 
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
 
         .page-header {
             background: var(--brand-navy);
@@ -254,18 +243,10 @@
             letter-spacing: 0.05em;
         }
 
-        /* =========================================
-           MAIN
-           ========================================= */
-
         .page-content {
             flex: 1;
             padding: 45px 0 60px;
         }
-
-        /* =========================================
-           SUMMARY CARDS
-           ========================================= */
 
         .summary-card {
             height: 100%;
@@ -301,10 +282,6 @@
             font-size: 1.6rem;
             font-weight: 800;
         }
-
-        /* =========================================
-           USER TABLE
-           ========================================= */
 
         .user-panel {
             background: #ffffff;
@@ -439,18 +416,10 @@
             font-size: 0.78rem;
         }
 
-        /* =========================================
-           ALERTS
-           ========================================= */
-
         .alert {
             border-radius: 4px;
             font-size: 0.8rem;
         }
-
-        /* =========================================
-           FOOTER
-           ========================================= */
 
         footer {
             padding: 24px 0;
@@ -467,10 +436,6 @@
         footer strong {
             color: #ffffff;
         }
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 768px) {
 
@@ -499,15 +464,11 @@
 
 <body>
 
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar admin-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Admin"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -581,11 +542,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         PAGE HEADER
-         ========================================= -->
-
     <header class="page-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -608,11 +564,6 @@
         </div>
 
     </header>
-
-
-    <!-- =========================================
-         MAIN
-         ========================================= -->
 
     <main class="page-content">
 
@@ -642,9 +593,6 @@
 
                 </div>
             }
-
-
-            <!-- SUMMARY -->
 
             <div class="row g-4 mb-4">
 
@@ -764,9 +712,6 @@
                 </div>
 
             </div>
-
-
-            <!-- USER LIST -->
 
             <div class="user-panel">
 
@@ -948,11 +893,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 

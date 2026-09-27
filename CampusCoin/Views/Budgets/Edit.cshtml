@@ -288,6 +288,20 @@
             font-size: 0.78rem;
         }
 
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .validation-summary li {
+            margin: 0;
+        }
+
+        .validation-summary li:not(:last-child) {
+            margin-bottom: 4px;
+        }
+
         .field-validation-error {
             display: block;
             margin-top: 5px;
@@ -354,7 +368,7 @@
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Dashboard"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -479,11 +493,8 @@
 
                 @if (!ViewData.ModelState.IsValid)
                 {
-                    <div class="validation-summary">
-                        <strong>Please correct the following:</strong>
-                        <div class="mt-2">
-                            <div asp-validation-summary="All"></div>
-                        </div>
+                    <div asp-validation-summary="All"
+                         class="validation-summary">
                     </div>
                 }
 
@@ -517,10 +528,6 @@
 
                         </select>
 
-                        <span asp-validation-for="CategoryId"
-                              class="field-validation-error">
-                        </span>
-
                     </div>
 
 
@@ -534,10 +541,6 @@
                         <input asp-for="Month"
                                type="month"
                                class="form-control" />
-
-                        <span asp-validation-for="Month"
-                              class="field-validation-error">
-                        </span>
 
                     </div>
 
@@ -555,10 +558,6 @@
                                min="0.01"
                                class="form-control"
                                placeholder="e.g. 5000" />
-
-                        <span asp-validation-for="LimitAmount"
-                              class="field-validation-error">
-                        </span>
 
                     </div>
 

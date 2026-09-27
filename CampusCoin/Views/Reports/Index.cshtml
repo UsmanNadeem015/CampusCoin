@@ -161,11 +161,6 @@
             font-weight: 900 !important;
         }
 
-
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .main-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -263,11 +258,6 @@
             color: #ffffff !important;
         }
 
-
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
-
         .reports-header {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -299,11 +289,6 @@
             font-size: 0.95rem;
         }
 
-
-        /* =========================================
-           CONTENT
-           ========================================= */
-
         .page-content {
             flex: 1;
             padding: 35px 0 60px;
@@ -328,11 +313,6 @@
             font-size: 0.85rem;
             margin-top: 5px;
         }
-
-
-        /* =========================================
-           REPORT CONTROLS
-           ========================================= */
 
         .report-controls {
             display: flex;
@@ -377,11 +357,6 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-
-
-        /* =========================================
-           SUMMARY CARDS
-           ========================================= */
 
         .summary-card {
             background: #ffffff;
@@ -434,11 +409,6 @@
             color: var(--brand-gold);
             background: #fff7ed;
         }
-
-
-        /* =========================================
-           TABLES
-           ========================================= */
 
         .table-wrapper {
             overflow-x: auto;
@@ -514,11 +484,6 @@
             color: #b91c1c;
         }
 
-
-        /* =========================================
-           CHARTS
-           ========================================= */
-
         .chart-panel {
             background: #ffffff;
             border: 1px solid var(--border-color);
@@ -550,11 +515,6 @@
             height: 360px;
         }
 
-
-        /* =========================================
-           EMPTY STATE
-           ========================================= */
-
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -585,11 +545,6 @@
             font-size: 0.84rem;
         }
 
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             margin-top: auto;
             background: #ffffff;
@@ -607,56 +562,101 @@
             color: var(--brand-navy);
         }
 
-
         /* =========================================
            PRINT
            ========================================= */
 
         @@media print {
 
+            @@page {
+                size: A4 portrait;
+                margin: 15mm;
+            }
+
+            html,
+            body {
+                background: #ffffff !important;
+                display: block !important;
+                min-height: 0 !important;
+                height: auto !important;
+            }
+
             .main-navbar,
             .reports-header,
             .report-actions,
             .report-controls button,
+            .report-controls .btn,
             footer,
-            a {
+            #reportContent > .text-center {
                 display: none !important;
             }
 
-            body {
-                background: #ffffff;
-                color: #000000;
-            }
-
             .page-content {
-                padding: 0;
+                padding: 0 !important;
+                display: block !important;
+                flex: none !important;
             }
 
-            .content-panel,
+            .container-fluid {
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            #reportContent {
+                padding: 0 !important;
+                display: block !important;
+            }
+
+            #reportContent > .content-panel,
+            #reportContent > .row,
+            #reportContent > .mb-4 {
+                margin-bottom: 8mm !important;
+            }
+
+            .page-break-before {
+                page-break-before: always !important;
+                break-before: page !important;
+                margin-top: 0 !important;
+            }
+
             .summary-card,
-            .chart-panel {
-                box-shadow: none;
-                border: 1px solid #000000;
-            }
-
-            .chart-container,
-            .chart-container.large {
+            .chart-panel,
+            .content-panel {
+                box-shadow: none !important;
+                break-inside: avoid;
                 page-break-inside: avoid;
             }
 
             table {
-                page-break-inside: auto;
+                break-inside: auto !important;
+                page-break-inside: auto !important;
+            }
+
+            thead {
+                display: table-header-group;
             }
 
             tr {
+                break-inside: avoid;
                 page-break-inside: avoid;
             }
+
+            .section-title,
+            .chart-title {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            .dashboard-table tbody tr:hover {
+                background: transparent !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 991px) {
 
@@ -718,16 +718,11 @@
 
 <body>
 
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar navbar-expand-lg main-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Dashboard"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -847,11 +842,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         HEADER
-         ========================================= -->
-
     <header class="reports-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -875,20 +865,10 @@
 
     </header>
 
-
-    <!-- =========================================
-         MAIN CONTENT
-         ========================================= -->
-
     <main class="page-content">
 
         <div class="container-fluid px-4 px-lg-5"
              id="reportContent">
-
-
-            <!-- =====================================
-                 REPORT CONTROLS
-                 ===================================== -->
 
             <div class="content-panel mb-4">
 
@@ -949,11 +929,6 @@
 
             </div>
 
-
-            <!-- =====================================
-                 REPORT MONTH
-                 ===================================== -->
-
             <div class="mb-4">
 
                 <h2 class="section-title">
@@ -965,11 +940,6 @@
                 </p>
 
             </div>
-
-
-            <!-- =====================================
-                 SUMMARY CARDS
-                 ===================================== -->
 
             <div class="row g-4 mb-5">
 
@@ -1067,12 +1037,7 @@
 
             </div>
 
-
-            <!-- =====================================
-                 EXPENSE BY CATEGORY
-                 ===================================== -->
-
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-5 page-break-before">
 
                 <div class="col-xl-6">
 
@@ -1184,12 +1149,7 @@
 
             </div>
 
-
-            <!-- =====================================
-                 SIX MONTH REPORT
-                 ===================================== -->
-
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-5 page-break-before">
 
                 <div class="col-xl-7">
 
@@ -1307,12 +1267,7 @@
 
             </div>
 
-
-            <!-- =====================================
-                 DAILY REPORT
-                 ===================================== -->
-
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-5 page-break-before">
 
                 <div class="col-xl-8">
 
@@ -1430,12 +1385,7 @@
 
             </div>
 
-
-            <!-- =====================================
-                 WEEKLY REPORT
-                 ===================================== -->
-
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-5 page-break-before">
 
                 <div class="col-xl-7">
 
@@ -1555,12 +1505,7 @@
 
             </div>
 
-
-            <!-- =====================================
-                 TRANSACTIONS
-                 ===================================== -->
-
-            <div class="content-panel mb-5">
+            <div class="content-panel mb-5 page-break-before">
 
                 <div class="d-flex flex-column flex-md-row
                             justify-content-between
@@ -1681,11 +1626,6 @@
 
             </div>
 
-
-            <!-- =====================================
-                 BACK TO DASHBOARD
-                 ===================================== -->
-
             <div class="text-center">
 
                 <a asp-controller="Dashboard"
@@ -1703,11 +1643,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 
@@ -1777,11 +1712,7 @@
             @Html.Raw(JsonSerializer.Serialize(weeklyExpenses));
 
 
-        /* =========================================
-           CATEGORY CHART
-           ========================================= */
-
-        new Chart(
+        const categoryChart = new Chart(
             document.getElementById("categoryChart"),
             {
                 type: "pie",
@@ -1798,17 +1729,13 @@
 
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    animation: false
                 }
             }
         );
 
-
-        /* =========================================
-           SIX MONTH CHART
-           ========================================= */
-
-        new Chart(
+        const sixMonthChart = new Chart(
             document.getElementById("sixMonthChart"),
             {
                 type: "bar",
@@ -1831,6 +1758,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: false,
 
                     scales: {
                         y: {
@@ -1841,12 +1769,7 @@
             }
         );
 
-
-        /* =========================================
-           DAILY CHART
-           ========================================= */
-
-        new Chart(
+        const dailyChart = new Chart(
             document.getElementById("dailyChart"),
             {
                 type: "line",
@@ -1871,6 +1794,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: false,
 
                     scales: {
                         y: {
@@ -1881,12 +1805,7 @@
             }
         );
 
-
-        /* =========================================
-           WEEKLY CHART
-           ========================================= */
-
-        new Chart(
+        const weeklyChart = new Chart(
             document.getElementById("weeklyChart"),
             {
                 type: "bar",
@@ -1909,6 +1828,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: false,
 
                     scales: {
                         y: {
@@ -1919,11 +1839,6 @@
             }
         );
 
-
-        /* =========================================
-           DOWNLOAD REPORT IMAGE
-           ========================================= */
-
         async function downloadReportImage() {
 
             const report =
@@ -1933,25 +1848,89 @@
                 return;
             }
 
-            const canvas =
-                await html2canvas(
-                    report,
-                    {
-                        scale: 2,
-                        backgroundColor: "#ffffff"
+            // Hide the buttons so they don't appear in the image.
+            const controls =
+                report.querySelector(".content-panel .report-controls");
+
+            if (controls) {
+                controls.style.display = "none";
+            }
+
+            const chartMap = [
+                { canvas: document.getElementById("categoryChart"), chart: categoryChart },
+                { canvas: document.getElementById("sixMonthChart"), chart: sixMonthChart },
+                { canvas: document.getElementById("dailyChart"),    chart: dailyChart },
+                { canvas: document.getElementById("weeklyChart"),   chart: weeklyChart }
+            ];
+
+            const replacements = [];
+
+            chartMap.forEach(function (entry) {
+
+                if (!entry.canvas || !entry.chart) {
+                    return;
+                }
+
+                const img = document.createElement("img");
+
+                img.src = entry.chart.toBase64Image("image/png", 1);
+                img.style.width = entry.canvas.style.width || "100%";
+                img.style.height = entry.canvas.style.height || "320px";
+                img.style.display = "block";
+
+                entry.canvas.parentNode.insertBefore(img, entry.canvas);
+                entry.canvas.style.display = "none";
+
+                replacements.push({
+                    canvas: entry.canvas,
+                    img: img
+                });
+
+            });
+
+            try {
+
+                const canvas =
+                    await html2canvas(
+                        report,
+                        {
+                            scale: 2,
+                            backgroundColor: "#ffffff",
+                            useCORS: true,
+                            logging: false,
+                            windowWidth: report.scrollWidth,
+                            windowHeight: report.scrollHeight
+                        }
+                    );
+
+                const link =
+                    document.createElement("a");
+
+                link.download =
+                    "CampusCoin-Report-@ViewBag.SelectedMonth" + ".png";
+
+                link.href =
+                    canvas.toDataURL("image/png");
+
+                link.click();
+
+            } finally {
+
+                replacements.forEach(function (entry) {
+
+                    if (entry.img.parentNode) {
+                        entry.img.parentNode.removeChild(entry.img);
                     }
-                );
 
-            const link =
-                document.createElement("a");
+                    entry.canvas.style.display = "";
 
-            link.download =
-                "CampusCoin-Report-@ViewBag.SelectedMonth" + ".png";
+                });
 
-            link.href =
-                canvas.toDataURL("image/png");
+                if (controls) {
+                    controls.style.display = "";
+                }
 
-            link.click();
+            }
         }
 
     </script>

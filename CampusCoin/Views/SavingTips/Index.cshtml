@@ -91,11 +91,6 @@
             font-weight: 900 !important;
         }
 
-
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .main-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -192,11 +187,6 @@
             color: #ffffff !important;
         }
 
-
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
-
         .page-header {
             background: var(--brand-navy);
             color: #ffffff;
@@ -228,11 +218,6 @@
             font-size: 0.84rem;
         }
 
-
-        /* =========================================
-           CONTENT
-           ========================================= */
-
         .page-content {
             flex: 1;
             padding: 45px 0 60px;
@@ -249,11 +234,6 @@
             color: var(--text-muted);
             font-size: 0.78rem;
         }
-
-
-        /* =========================================
-           PERSONALIZED TIP CARDS
-           ========================================= */
 
         .tip-card {
             height: 100%;
@@ -385,9 +365,8 @@
             color: var(--danger);
         }
 
-
         /* =========================================
-           UNIVERSAL TIP CAROUSEL
+           CAROUSEL
            ========================================= */
 
         .carousel-section {
@@ -402,14 +381,18 @@
             border: 1px solid #334155;
         }
 
-        .tip-slide {
-            display: none;
-            min-height: 285px;
-            padding: 40px 90px 55px;
-            position: relative;
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform;
         }
 
-        .tip-slide.active {
+        .tip-slide {
+            flex: 0 0 100%;
+            min-width: 100%;
+            min-height: 285px;
+            padding: 40px 90px 55px;
             display: flex;
             align-items: center;
         }
@@ -457,6 +440,7 @@
             justify-content: center;
             cursor: pointer;
             z-index: 5;
+            transition: background 0.2s ease, color 0.2s ease;
         }
 
         .carousel-control-custom:hover {
@@ -480,6 +464,7 @@
             transform: translateX(-50%);
             display: flex;
             gap: 7px;
+            z-index: 5;
         }
 
         .carousel-dot {
@@ -489,17 +474,13 @@
             border: none;
             padding: 0;
             cursor: pointer;
+            transition: width 0.3s ease, background 0.3s ease;
         }
 
         .carousel-dot.active {
             width: 22px;
             background: var(--brand-gold-light);
         }
-
-
-        /* =========================================
-           EMPTY STATES
-           ========================================= */
 
         .empty-state {
             padding: 55px 20px;
@@ -533,11 +514,6 @@
             font-size: 0.76rem;
         }
 
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             padding: 24px 0;
             background: var(--brand-navy);
@@ -553,11 +529,6 @@
         footer strong {
             color: #ffffff;
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 991px) {
 
@@ -611,16 +582,11 @@
 
 <body>
 
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar navbar-expand-lg main-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Dashboard"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -740,11 +706,6 @@
 
     </nav>
 
-
-    <!-- =========================================
-         PAGE HEADER
-         ========================================= -->
-
     <header class="page-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -768,19 +729,9 @@
 
     </header>
 
-
-    <!-- =========================================
-         MAIN CONTENT
-         ========================================= -->
-
     <main class="page-content">
 
         <div class="container-fluid px-4 px-lg-5">
-
-
-            <!-- =====================================
-                 PERSONALIZED TIPS
-                 ===================================== -->
 
             <div>
 
@@ -975,11 +926,6 @@
 
             }
 
-
-            <!-- =====================================
-                 UNIVERSAL TIP CAROUSEL
-                 ===================================== -->
-
             @if (tipTemplates.Count > 0)
             {
 
@@ -1001,33 +947,38 @@
                     <div class="carousel-shell"
                          id="tipsCarousel">
 
-                        @for (var i = 0; i < tipTemplates.Count; i++)
-                        {
-                            var template = tipTemplates[i];
+                        <div class="carousel-track"
+                             id="tipsTrack">
 
-                            <div class="tip-slide @(i == 0 ? "active" : "")">
+                            @for (var i = 0; i < tipTemplates.Count; i++)
+                            {
+                                var template = tipTemplates[i];
 
-                                <div class="tip-slide-content">
+                                <div class="tip-slide">
 
-                                    <span class="universal-badge">
+                                    <div class="tip-slide-content">
 
-                                        <i class="fa-solid fa-bullseye me-1"></i>
-                                        Universal Tip
+                                        <span class="universal-badge">
 
-                                    </span>
+                                            <i class="fa-solid fa-bullseye me-1"></i>
+                                            Universal Tip
 
-                                    <h3>
-                                        @template.Title
-                                    </h3>
+                                        </span>
 
-                                    <p>
-                                        @template.Description
-                                    </p>
+                                        <h3>
+                                            @template.Title
+                                        </h3>
+
+                                        <p>
+                                            @template.Description
+                                        </p>
+
+                                    </div>
 
                                 </div>
+                            }
 
-                            </div>
-                        }
+                        </div>
 
 
                         @if (tipTemplates.Count > 1)
@@ -1074,11 +1025,6 @@
 
             }
 
-
-            <!-- =====================================
-                 FOOTER LINK
-                 ===================================== -->
-
             <div class="text-center mt-5">
 
                 <a asp-controller="Dashboard"
@@ -1096,11 +1042,6 @@
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 
@@ -1134,6 +1075,9 @@
             "DOMContentLoaded",
             function () {
 
+                const track =
+                    document.getElementById("tipsTrack");
+
                 const slides =
                     document.querySelectorAll(".tip-slide");
 
@@ -1146,7 +1090,7 @@
                 const nextButton =
                     document.getElementById("tipsNext");
 
-                if (slides.length <= 1) {
+                if (!track || slides.length <= 1) {
                     return;
                 }
 
@@ -1159,15 +1103,13 @@
                     currentSlide =
                         (index + slides.length) % slides.length;
 
-                    slides.forEach(
-                        (slide, i) => {
-                            slide.classList.toggle(
-                                "active",
-                                i === currentSlide
-                            );
-                        }
-                    );
+                    // Animate the track horizontally.
+                    track.style.transform =
+                        "translateX(" +
+                        (-currentSlide * 100) +
+                        "%)";
 
+                    // Update dot indicators.
                     dots.forEach(
                         (dot, i) => {
                             dot.classList.toggle(

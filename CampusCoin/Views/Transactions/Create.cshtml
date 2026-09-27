@@ -243,7 +243,16 @@
 
         .validation-summary-errors ul {
             margin: 0;
-            padding-left: 18px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .validation-summary-errors li {
+            margin: 0;
+        }
+
+        .validation-summary-errors li:not(:last-child) {
+            margin-bottom: 4px;
         }
 
         .form-actions {
@@ -412,9 +421,12 @@
 
                 @Html.AntiForgeryToken()
 
-                <div asp-validation-summary="All"
-                     class="validation-summary-errors mb-3">
-                </div>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All"
+                         class="validation-summary-errors mb-3">
+                    </div>
+                }
 
                 <div class="row g-4">
 
@@ -425,10 +437,12 @@
                             Transaction Type
                         </label>
 
-                        <select asp-for="TransactionType" id="TransactionType" class="form-select">
-                           <option value="1">Income</option>
-                           <option value="2">Expense</option>
-                       </select>
+                        <select asp-for="TransactionType"
+                                id="TransactionType"
+                                class="form-select">
+                            <option value="1">Income</option>
+                            <option value="2">Expense</option>
+                        </select>
 
                         <span asp-validation-for="TransactionType"></span>
 
@@ -459,22 +473,23 @@
                             Category
                         </label>
 
-<select asp-for="CategoryId"
-        id="CategoryId"
-        class="form-select">
+                        <select asp-for="CategoryId"
+                                id="CategoryId"
+                                class="form-select">
 
-    <option value="">
-        Select Category
-    </option>
+                            <option value="">
+                                Select Category
+                            </option>
 
-    @foreach (var category in categories)
-    {
-        <option value="@category.CategoryId">
-            @category.Name
-        </option>
-    }
+                            @foreach (var category in categories)
+                            {
+                                <option value="@category.CategoryId"
+                                        data-type="@((int)category.Type)">
+                                    @category.Name
+                                </option>
+                            }
 
-</select>
+                        </select>
 
                         <span asp-validation-for="CategoryId"></span>
 
@@ -495,42 +510,42 @@
 
                     </div>
 
-<div class="col-12">
+                    <div class="col-12">
 
-    <label asp-for="Description"
-           class="form-label">
-        Description
-    </label>
+                        <label asp-for="Description"
+                               class="form-label">
+                            Description
+                        </label>
 
-    <textarea asp-for="Description"
-              id="Description"
-              class="form-control"
-              rows="3"
-              maxlength="250"
-              placeholder="Example: Coffee and sandwich at Campus Cafe"></textarea>
+                        <textarea asp-for="Description"
+                                  id="Description"
+                                  class="form-control"
+                                  rows="3"
+                                  maxlength="250"
+                                  placeholder="Example: Coffee and sandwich at Campus Cafe"></textarea>
 
-    <span asp-validation-for="Description"></span>
+                        <span asp-validation-for="Description"></span>
 
-    <div class="d-flex align-items-center gap-2 flex-wrap mt-2">
+                        <div class="d-flex align-items-center gap-2 flex-wrap mt-2">
 
-        <button type="button"
-                id="aiSuggestButton"
-                class="btn btn-outline-navy btn-sm">
+                            <button type="button"
+                                    id="aiSuggestButton"
+                                    class="btn btn-outline-navy btn-sm">
 
-            <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
-            Suggest Category with AI
+                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
+                                Suggest Category with AI
 
-        </button>
+                            </button>
 
-        <span id="aiSuggestionStatus"
-              class="text-muted"
-              style="font-size:.72rem;"
-              aria-live="polite">
-        </span>
+                            <span id="aiSuggestionStatus"
+                                  class="text-muted"
+                                  style="font-size:.72rem;"
+                                  aria-live="polite">
+                            </span>
 
-    </div>
+                        </div>
 
-</div>
+                    </div>
 
                     <div class="col-12">
 
@@ -624,6 +639,50 @@
         let suggestionTimer = null;
         let lastDescription = "";
 
+        const allCategoryOptions = Array.from(
+            categorySelect.querySelectorAll("option[data-type]")
+        );
+
+        function filterCategoriesByType(typeValue) {
+
+            const currentValue = categorySelect.value;
+
+            categorySelect
+                .querySelectorAll("option[data-type]")
+                .forEach(function (option) {
+                    option.remove();
+                });
+
+            allCategoryOptions
+                .filter(function (option) {
+                    return option.dataset.type === String(typeValue);
+                })
+                .forEach(function (option) {
+                    categorySelect.appendChild(option);
+                });
+
+            const stillValid = Array.from(
+                categorySelect.querySelectorAll("option[data-type]")
+            ).some(function (option) {
+                return option.value === currentValue;
+            });
+
+            if (!stillValid) {
+                categorySelect.value = "";
+            }
+        }
+
+        filterCategoriesByType(transactionTypeSelect.value);
+
+        transactionTypeSelect.addEventListener("change", function () {
+
+            filterCategoriesByType(this.value);
+
+            lastDescription = "";
+
+            setStatus("");
+        });
+
         function setStatus(message, type = "muted") {
 
             statusText.textContent = message;
@@ -712,14 +771,29 @@
                     await response.json();
 
                 if (result.success) {
+                    const suggestionOption =
+                        categorySelect.querySelector(
+                            'option[value="' + result.categoryId + '"]'
+                        );
 
-                    categorySelect.value =
-                        result.categoryId;
+                    if (suggestionOption) {
 
-                    setStatus(
-                        `Suggested: ${result.categoryName}`,
-                        "success"
-                    );
+                        categorySelect.value =
+                            result.categoryId;
+
+                        setStatus(
+                            `Suggested: ${result.categoryName}`,
+                            "success"
+                        );
+
+                    }
+                    else {
+
+                        setStatus(
+                            "The suggested category is not available for this transaction type.",
+                            "danger"
+                        );
+                    }
 
                 }
                 else {
@@ -762,23 +836,6 @@
         descriptionInput.addEventListener(
             "input",
             scheduleSuggestion
-        );
-
-        transactionTypeSelect.addEventListener(
-            "change",
-            function () {
-
-                lastDescription = "";
-
-                categorySelect.value = "";
-
-                if (descriptionInput.value.trim()) {
-                    scheduleSuggestion();
-                }
-                else {
-                    setStatus("");
-                }
-            }
         );
 
         suggestButton.addEventListener(

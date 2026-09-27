@@ -44,7 +44,7 @@ builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddScoped<AICategorizationService>();
 
-builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<AIInsightsService>();
 
 var app = builder.Build();
 

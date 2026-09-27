@@ -81,11 +81,6 @@ Layout = null;
             font-weight: 900 !important;
         }
 
-
-        /* =========================================
-           NAVBAR
-           ========================================= */
-
         .admin-navbar {
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
@@ -154,11 +149,6 @@ Layout = null;
             font-size: 0.65rem;
         }
 
-
-        /* =========================================
-           BUTTONS
-           ========================================= */
-
         .btn {
             font-weight: 700;
             border-radius: 4px;
@@ -191,11 +181,6 @@ Layout = null;
             color: #ffffff !important;
         }
 
-
-        /* =========================================
-           PAGE HEADER
-           ========================================= */
-
         .page-header {
             background: var(--brand-navy);
             color: #ffffff;
@@ -227,20 +212,10 @@ Layout = null;
             letter-spacing: 0.05em;
         }
 
-
-        /* =========================================
-           MAIN
-           ========================================= */
-
         .page-content {
             flex: 1;
             padding: 45px 0 60px;
         }
-
-
-        /* =========================================
-           STAT CARDS
-           ========================================= */
 
         .stat-card {
             height: 100%;
@@ -289,12 +264,7 @@ Layout = null;
             line-height: 1;
         }
 
-
-        /* =========================================
-           CATEGORY TABLE
-           ========================================= */
-
-        .section-title {
+       .section-title {
             margin-bottom: 7px;
             color: var(--brand-navy);
             font-size: 1.2rem;
@@ -392,11 +362,6 @@ Layout = null;
             font-size: 0.78rem;
         }
 
-
-        /* =========================================
-           FOOTER
-           ========================================= */
-
         footer {
             padding: 24px 0;
             background: var(--brand-navy);
@@ -412,11 +377,6 @@ Layout = null;
         footer strong {
             color: #ffffff;
         }
-
-
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
 
         @@media (max-width: 768px) {
 
@@ -450,16 +410,11 @@ Layout = null;
 
 <body>
 
-
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
-
     <nav class="navbar admin-navbar">
 
         <div class="container-fluid px-4 px-lg-5">
 
-            <a asp-controller="Admin"
+            <a asp-controller="Home"
                asp-action="Index"
                class="brand">
 
@@ -536,11 +491,6 @@ Layout = null;
 
     </nav>
 
-
-    <!-- =========================================
-         PAGE HEADER
-         ========================================= -->
-
     <header class="page-header">
 
         <div class="container-fluid px-4 px-lg-5">
@@ -565,17 +515,9 @@ Layout = null;
 
     </header>
 
-
-    <!-- =========================================
-         MAIN
-         ========================================= -->
-
     <main class="page-content">
 
         <div class="container-fluid px-4 px-lg-5">
-
-
-            <!-- SUMMARY CARDS -->
 
             <div class="row g-4 mb-5">
 
@@ -621,9 +563,6 @@ Layout = null;
                 </div>
 
             </div>
-
-
-            <!-- MOST USED CATEGORIES -->
 
             <h2 class="section-title">
                 Most Used Categories
@@ -724,11 +663,6 @@ Layout = null;
         </div>
 
     </main>
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
 
     <footer>
 
