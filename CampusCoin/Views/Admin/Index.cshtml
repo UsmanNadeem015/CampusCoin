@@ -78,10 +78,7 @@ body {
             --border-color: #e2e8f0;
         }
 
-
-        /* =========================================
-           NAVBAR
-           ========================================= */
+/* NAVBAR */
 
         .admin-navbar {
             background: #ffffff;
@@ -150,12 +147,7 @@ body {
             color: var(--text-muted);
             font-size: 0.65rem;
         }
-
-
-        /* =========================================
-           BUTTONS
-           ========================================= */
-
+/* buttons */
         .btn {
             font-weight: 700;
             transition: all 0.2s ease;
@@ -235,19 +227,14 @@ body {
             letter-spacing: 0.05em;
         }
 
+/* MAIN CONTENT */
 
-        /* =========================================
-           MAIN CONTENT
-           ========================================= */
-
-       .dashboard-content {
+    .dashboard-content {
     padding: 50px 0;
     flex: 1;
-}
+    }
 
-        /* =========================================
-   STATISTICS CARDS
-   ========================================= */
+/* STATISTICS CARDS */
 
 .stats-grid {
     display: grid;
@@ -344,13 +331,11 @@ body {
         }
 
 
-        /* =========================================
-           ADMIN MODULE CARDS
-           ========================================= */
+        /* ADMIN MODULE CARDS */
 
-           .modules-grid {
+    .modules-grid {
     margin-bottom: 55px;
-}
+    }
         .module-card {
             height: 100%;
             padding: 28px;
@@ -405,9 +390,7 @@ body {
         }
 
 
-        /* =========================================
-           FOOTER
-           ========================================= */
+        /* FOOTER */
 
         footer {
             margin-top: auto;
@@ -427,9 +410,7 @@ body {
         }
 
 
-        /* =========================================
-           RESPONSIVE
-           ========================================= */
+        /* RESPONSIVE */
 
         @@media (max-width: 768px) {
 
@@ -455,9 +436,8 @@ body {
 <body>
 
 
-    <!-- =========================================
-         NAVBAR
-         ========================================= -->
+     @* NAVBAR *@
+     
 
     <nav class="navbar admin-navbar">
 
@@ -552,10 +532,7 @@ body {
 
     </nav>
 
-
-    <!-- =========================================
-         HEADER
-         ========================================= -->
+         @* HEADER *@
 
     <header class="page-header">
 
@@ -587,16 +564,14 @@ body {
     </header>
 
 
-    <!-- =========================================
-         MAIN
-         ========================================= -->
+         @* MAIN *@
 
     <main class="dashboard-content">
 
         <div class="container-fluid px-4 px-lg-5">
 
 
-            <!-- MODULES -->
+            @*  MODULES  *@
 
             <div class="section-heading">
 
@@ -696,9 +671,7 @@ body {
 
     </div>
 
-</div>
-
-<!-- STATISTICS -->
+    <!-- STATISTICS -->
 
 <div class="col-lg-4 col-md-6">
 
@@ -730,6 +703,10 @@ body {
     </a>
 
 </div>
+
+</div>
+
+
 
 <!-- STATISTICS -->
 

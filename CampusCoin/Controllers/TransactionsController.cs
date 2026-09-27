@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using CampusCoin.Services;
+using System.Security.Claims;
 using CampusCoin.Domain.Entities;
 using CampusCoin.Domain.Enums;
 using CampusCoin.Infrastructure.Data;
@@ -12,10 +13,14 @@ namespace CampusCoin.Controllers;
 public class TransactionsController : Controller
 {
     private readonly CampusCoinDbContext _context;
+    private readonly AICategorizationService _aiCategorizationService;
 
-    public TransactionsController(CampusCoinDbContext context)
+    public TransactionsController(
+        CampusCoinDbContext context,
+        AICategorizationService aiCategorizationService)
     {
         _context = context;
+        _aiCategorizationService = aiCategorizationService;
     }
 
     [HttpGet]
@@ -134,6 +139,100 @@ public class TransactionsController : Controller
         return RedirectToAction(nameof(Index));
     }
     // Create end
+
+    // Ai suggestions start
+    // AI category suggestion start
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SuggestCategory(
+        [FromBody] CategorySuggestionRequest request,
+        CancellationToken cancellationToken)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null ||
+            !int.TryParse(userIdClaim.Value, out int userId))
+        {
+            return Unauthorized();
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Description))
+        {
+            return BadRequest(new
+            {
+                success = false,
+                message = "A transaction description is required."
+            });
+        }
+
+        if (!Enum.IsDefined(typeof(TransactionType), request.TransactionType))
+        {
+            return BadRequest(new
+            {
+                success = false,
+                message = "Invalid transaction type."
+            });
+        }
+
+        // Only categories this student is actually allowed to use.
+        var categories = await _context.Categories
+            .Where(c =>
+                c.IsDefault ||
+                c.UserId == userId)
+            .OrderBy(c => c.Type)
+            .ThenBy(c => c.Name)
+            .ToListAsync(cancellationToken);
+
+        if (categories.Count == 0)
+        {
+            return Ok(new
+            {
+                success = false,
+                message = "No categories are available."
+            });
+        }
+
+        var suggestedCategoryId =
+            await _aiCategorizationService.SuggestCategoryAsync(
+                request.Description,
+                request.TransactionType,
+                categories,
+                cancellationToken);
+
+        if (!suggestedCategoryId.HasValue)
+        {
+            return Ok(new
+            {
+                success = false,
+                message = "No suitable category suggestion was found."
+            });
+        }
+
+        var suggestedCategory = categories
+            .FirstOrDefault(c =>
+                c.CategoryId == suggestedCategoryId.Value);
+
+        if (suggestedCategory == null)
+        {
+            return Ok(new
+            {
+                success = false,
+                message = "The suggested category is not available."
+            });
+        }
+
+        return Ok(new
+        {
+            success = true,
+            categoryId = suggestedCategory.CategoryId,
+            categoryName = suggestedCategory.Name
+        });
+    }
+
+    // AI category suggestion end
+    // Ai suggestions end
+
 
     // Edit start
     [HttpGet]
@@ -428,5 +527,12 @@ public class TransactionsController : Controller
         _context.Notifications.Add(notification);
 
         await _context.SaveChangesAsync();
+    }
+
+    public class CategorySuggestionRequest
+    {
+        public string Description { get; set; } = string.Empty;
+
+        public TransactionType TransactionType { get; set; }
     }
 }

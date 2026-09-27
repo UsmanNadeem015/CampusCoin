@@ -282,7 +282,7 @@
 
     <div class="container-fluid px-4 px-lg-5">
 
-        <a asp-controller="Dashboard"
+        <a asp-controller="Home"
            asp-action="Index"
            class="brand">
 
@@ -425,13 +425,10 @@
                             Transaction Type
                         </label>
 
-                        <select asp-for="TransactionType"
-                                class="form-select">
-
-                            <option value="1">Income</option>
-                            <option value="2">Expense</option>
-
-                        </select>
+                        <select asp-for="TransactionType" id="TransactionType" class="form-select">
+                           <option value="1">Income</option>
+                           <option value="2">Expense</option>
+                       </select>
 
                         <span asp-validation-for="TransactionType"></span>
 
@@ -462,21 +459,22 @@
                             Category
                         </label>
 
-                        <select asp-for="CategoryId"
-                                class="form-select">
+<select asp-for="CategoryId"
+        id="CategoryId"
+        class="form-select">
 
-                            <option value="">
-                                Select Category
-                            </option>
+    <option value="">
+        Select Category
+    </option>
 
-                            @foreach (var category in categories)
-                            {
-                                <option value="@category.CategoryId">
-                                    @category.Name
-                                </option>
-                            }
+    @foreach (var category in categories)
+    {
+        <option value="@category.CategoryId">
+            @category.Name
+        </option>
+    }
 
-                        </select>
+</select>
 
                         <span asp-validation-for="CategoryId"></span>
 
@@ -497,20 +495,42 @@
 
                     </div>
 
-                    <div class="col-12">
+<div class="col-12">
 
-                        <label asp-for="Description"
-                               class="form-label">
-                            Description
-                        </label>
+    <label asp-for="Description"
+           class="form-label">
+        Description
+    </label>
 
-                        <textarea asp-for="Description"
-                                  class="form-control"
-                                  placeholder="Optional description..."></textarea>
+    <textarea asp-for="Description"
+              id="Description"
+              class="form-control"
+              rows="3"
+              maxlength="250"
+              placeholder="Example: Coffee and sandwich at Campus Cafe"></textarea>
 
-                        <span asp-validation-for="Description"></span>
+    <span asp-validation-for="Description"></span>
 
-                    </div>
+    <div class="d-flex align-items-center gap-2 flex-wrap mt-2">
+
+        <button type="button"
+                id="aiSuggestButton"
+                class="btn btn-outline-navy btn-sm">
+
+            <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
+            Suggest Category with AI
+
+        </button>
+
+        <span id="aiSuggestionStatus"
+              class="text-muted"
+              style="font-size:.72rem;"
+              aria-live="polite">
+        </span>
+
+    </div>
+
+</div>
 
                     <div class="col-12">
 
@@ -582,6 +602,197 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const descriptionInput =
+            document.getElementById("Description");
+
+        const transactionTypeSelect =
+            document.getElementById("TransactionType");
+
+        const categorySelect =
+            document.getElementById("CategoryId");
+
+        const suggestButton =
+            document.getElementById("aiSuggestButton");
+
+        const statusText =
+            document.getElementById("aiSuggestionStatus");
+
+        let suggestionTimer = null;
+        let lastDescription = "";
+
+        function setStatus(message, type = "muted") {
+
+            statusText.textContent = message;
+
+            statusText.className = "";
+
+            statusText.style.fontSize = ".72rem";
+
+            if (type === "success") {
+                statusText.classList.add("text-success");
+            }
+            else if (type === "danger") {
+                statusText.classList.add("text-danger");
+            }
+            else {
+                statusText.classList.add("text-muted");
+            }
+        }
+
+        async function suggestCategory() {
+
+            const description =
+                descriptionInput.value.trim();
+
+            const transactionType =
+                parseInt(transactionTypeSelect.value);
+
+            if (!description || description.length < 3) {
+                setStatus("");
+                return;
+            }
+
+            if (isNaN(transactionType)) {
+                setStatus(
+                    "Select a transaction type first.",
+                    "danger"
+                );
+
+                return;
+            }
+
+            if (description === lastDescription) {
+                return;
+            }
+
+            lastDescription = description;
+
+            suggestButton.disabled = true;
+
+            setStatus(
+                "AI is suggesting a category..."
+            );
+
+            const tokenInput =
+                document.querySelector(
+                    'input[name="__RequestVerificationToken"]'
+                );
+
+            try {
+
+                const response = await fetch(
+                    '@Url.Action("SuggestCategory", "Transactions")',
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                            "RequestVerificationToken":
+                                tokenInput.value
+                        },
+
+                        body: JSON.stringify({
+                            description: description,
+                            transactionType: transactionType
+                        })
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "AI suggestion request failed."
+                    );
+                }
+
+                const result =
+                    await response.json();
+
+                if (result.success) {
+
+                    categorySelect.value =
+                        result.categoryId;
+
+                    setStatus(
+                        `Suggested: ${result.categoryName}`,
+                        "success"
+                    );
+
+                }
+                else {
+
+                    setStatus(
+                        result.message ||
+                        "No suitable category suggestion found.",
+                        "danger"
+                    );
+                }
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                setStatus(
+                    "Could not get an AI suggestion. You can select a category manually.",
+                    "danger"
+                );
+
+            }
+            finally {
+
+                suggestButton.disabled = false;
+            }
+        }
+
+        function scheduleSuggestion() {
+
+            clearTimeout(suggestionTimer);
+
+            suggestionTimer =
+                setTimeout(
+                    suggestCategory,
+                    800
+                );
+        }
+
+        descriptionInput.addEventListener(
+            "input",
+            scheduleSuggestion
+        );
+
+        transactionTypeSelect.addEventListener(
+            "change",
+            function () {
+
+                lastDescription = "";
+
+                categorySelect.value = "";
+
+                if (descriptionInput.value.trim()) {
+                    scheduleSuggestion();
+                }
+                else {
+                    setStatus("");
+                }
+            }
+        );
+
+        suggestButton.addEventListener(
+            "click",
+            function () {
+
+                lastDescription = "";
+
+                suggestCategory();
+            }
+        );
+
+    });
+</script>
 
 </body>
 </html>

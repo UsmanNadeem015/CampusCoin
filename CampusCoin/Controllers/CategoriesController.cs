@@ -56,12 +56,42 @@ public class CategoriesController : Controller
             User.FindFirstValue(ClaimTypes.NameIdentifier)!
         );
 
+        var name = input.Name.Trim();
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            ModelState.AddModelError(
+                "Name",
+                "Category name cannot be empty."
+            );
+
+            return View(input);
+        }
+
+        var exists = await _context.Categories
+            .AnyAsync(c =>
+                c.Type == input.Type &&
+                c.Name == name &&
+                (c.IsDefault || c.UserId == userId)
+            );
+
+        if (exists)
+        {
+            ModelState.AddModelError(
+                "Name",
+                "A category with this name and type already exists."
+            );
+
+            return View(input);
+        }
+
         var category = new Category
         {
-            Name = input.Name,
+            Name = name,
             Type = input.Type,
             IsDefault = false,
-            UserId = userId
+            UserId = userId,
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.Categories.Add(category);
@@ -70,11 +100,10 @@ public class CategoriesController : Controller
 
         return RedirectToAction(nameof(Index));
     }
-
     public class CategoryInput
     {
         [Required]
-        [StringLength(100)]
+        [StringLength(50)]
         public string Name { get; set; } = string.Empty;
 
         [Required]
@@ -110,34 +139,66 @@ public class CategoriesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, CategoryInput input)
+    public async Task<IActionResult> Edit(
+    int id,
+    CategoryInput input)
+    {
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(input);
-            }
-    
-            var userId = int.Parse(
-                User.FindFirstValue(ClaimTypes.NameIdentifier)!
+            return View(input);
+        }
+
+        var userId = int.Parse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier)!
+        );
+
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.CategoryId == id &&
+                c.UserId == userId &&
+                !c.IsDefault);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        var name = input.Name.Trim();
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            ModelState.AddModelError(
+                "Name",
+                "Category name cannot be empty."
             );
-    
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(c =>
-                    c.CategoryId == id &&
-                    c.UserId == userId &&
-                    !c.IsDefault);
-    
-            if (category == null)
-            {
-                return NotFound();
-            }
-    
-            category.Name = input.Name;
-            category.Type = input.Type;
-    
-            await _context.SaveChangesAsync();
-    
-            return RedirectToAction(nameof(Index));
+
+            return View(input);
+        }
+
+        var exists = await _context.Categories
+            .AnyAsync(c =>
+                c.CategoryId != id &&
+                c.Type == input.Type &&
+                c.Name == name &&
+                (c.IsDefault || c.UserId == userId)
+            );
+
+        if (exists)
+        {
+            ModelState.AddModelError(
+                "Name",
+                "A category with this name and type already exists."
+            );
+
+            return View(input);
+        }
+
+        category.Name = name;
+        category.Type = input.Type;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]

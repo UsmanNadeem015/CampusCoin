@@ -1,6 +1,8 @@
+#pragma warning disable OPENAI001
 using CampusCoin.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using CampusCoin.Services;
+using OpenAI.Responses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,25 @@ builder.Services
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
     });
+
+builder.Services.AddSingleton<ResponsesClient>(sp =>
+{
+    var apiKey = sp
+        .GetRequiredService<IConfiguration>()["OpenAI:ApiKey"];
+
+    if (string.IsNullOrWhiteSpace(apiKey))
+    {
+        throw new InvalidOperationException(
+            "OpenAI API key is not configured."
+        );
+    }
+
+    return new ResponsesClient(apiKey: apiKey);
+});
+
+builder.Services.AddScoped<EmailService>();
+
+builder.Services.AddScoped<AICategorizationService>();
 
 builder.Services.AddScoped<EmailService>();
 
@@ -57,4 +78,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
+
 app.Run();
+
+#pragma warning restore OPENAI001
