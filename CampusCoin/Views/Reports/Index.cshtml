@@ -914,14 +914,14 @@
 
                         </button>
 
-                        <button type="button"
-                                class="btn btn-navy"
-                                onclick="downloadReportImage()">
-
-                            <i class="fa-solid fa-image me-1"></i>
-                            Download Report Image
-
-                        </button>
+                       <button type="button"
+                               class="btn btn-navy"
+                               onclick="downloadReportCsv()">
+                       
+                           <i class="fa-solid fa-file-csv me-1"></i>
+                           Download CSV
+                       
+                       </button>
 
                     </div>
 
@@ -1673,271 +1673,595 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
+<script>
 
-        const categoryLabels =
-            @Html.Raw(JsonSerializer.Serialize(categoryLabels));
+    // ==========================================
+    // CHART DATA
+    // ==========================================
 
-        const categoryValues =
-            @Html.Raw(JsonSerializer.Serialize(categoryValues));
+    const categoryLabels =
+        @Html.Raw(JsonSerializer.Serialize(categoryLabels));
 
-
-        const sixMonthLabels =
-            @Html.Raw(JsonSerializer.Serialize(sixMonthLabels));
-
-        const sixMonthIncome =
-            @Html.Raw(JsonSerializer.Serialize(sixMonthIncome));
-
-        const sixMonthExpenses =
-            @Html.Raw(JsonSerializer.Serialize(sixMonthExpenses));
+    const categoryValues =
+        @Html.Raw(JsonSerializer.Serialize(categoryValues));
 
 
-        const dailyLabels =
-            @Html.Raw(JsonSerializer.Serialize(dailyLabels));
+    const sixMonthLabels =
+        @Html.Raw(JsonSerializer.Serialize(sixMonthLabels));
 
-        const dailyIncome =
-            @Html.Raw(JsonSerializer.Serialize(dailyIncome));
+    const sixMonthIncome =
+        @Html.Raw(JsonSerializer.Serialize(sixMonthIncome));
 
-        const dailyExpenses =
-            @Html.Raw(JsonSerializer.Serialize(dailyExpenses));
-
-
-        const weeklyLabels =
-            @Html.Raw(JsonSerializer.Serialize(weeklyLabels));
-
-        const weeklyIncome =
-            @Html.Raw(JsonSerializer.Serialize(weeklyIncome));
-
-        const weeklyExpenses =
-            @Html.Raw(JsonSerializer.Serialize(weeklyExpenses));
+    const sixMonthExpenses =
+        @Html.Raw(JsonSerializer.Serialize(sixMonthExpenses));
 
 
-        const categoryChart = new Chart(
-            document.getElementById("categoryChart"),
-            {
-                type: "pie",
+    const dailyLabels =
+        @Html.Raw(JsonSerializer.Serialize(dailyLabels));
 
-                data: {
-                    labels: categoryLabels,
+    const dailyIncome =
+        @Html.Raw(JsonSerializer.Serialize(dailyIncome));
 
-                    datasets: [
-                        {
-                            data: categoryValues
-                        }
-                    ]
-                },
+    const dailyExpenses =
+        @Html.Raw(JsonSerializer.Serialize(dailyExpenses));
 
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false
-                }
-            }
-        );
 
-        const sixMonthChart = new Chart(
-            document.getElementById("sixMonthChart"),
-            {
-                type: "bar",
+    const weeklyLabels =
+        @Html.Raw(JsonSerializer.Serialize(weeklyLabels));
 
-                data: {
-                    labels: sixMonthLabels,
+    const weeklyIncome =
+        @Html.Raw(JsonSerializer.Serialize(weeklyIncome));
 
-                    datasets: [
-                        {
-                            label: "Income",
-                            data: sixMonthIncome
-                        },
-                        {
-                            label: "Expenses",
-                            data: sixMonthExpenses
-                        }
-                    ]
-                },
+    const weeklyExpenses =
+        @Html.Raw(JsonSerializer.Serialize(weeklyExpenses));
 
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
 
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+    // ==========================================
+    // CATEGORY CHART
+    // ==========================================
+
+    const categoryChart = new Chart(
+        document.getElementById("categoryChart"),
+        {
+            type: "pie",
+
+            data: {
+                labels: categoryLabels,
+
+                datasets: [
+                    {
+                        data: categoryValues
                     }
-                }
-            }
-        );
+                ]
+            },
 
-        const dailyChart = new Chart(
-            document.getElementById("dailyChart"),
-            {
-                type: "line",
-
-                data: {
-                    labels: dailyLabels,
-
-                    datasets: [
-                        {
-                            label: "Income",
-                            data: dailyIncome,
-                            tension: 0.3
-                        },
-                        {
-                            label: "Expenses",
-                            data: dailyExpenses,
-                            tension: 0.3
-                        }
-                    ]
-                },
-
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
-
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            }
-        );
-
-        const weeklyChart = new Chart(
-            document.getElementById("weeklyChart"),
-            {
-                type: "bar",
-
-                data: {
-                    labels: weeklyLabels,
-
-                    datasets: [
-                        {
-                            label: "Income",
-                            data: weeklyIncome
-                        },
-                        {
-                            label: "Expenses",
-                            data: weeklyExpenses
-                        }
-                    ]
-                },
-
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,
-
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            }
-        );
-
-        async function downloadReportImage() {
-
-            const report =
-                document.getElementById("reportContent");
-
-            if (!report) {
-                return;
-            }
-
-            // Hide the buttons so they don't appear in the image.
-            const controls =
-                report.querySelector(".content-panel .report-controls");
-
-            if (controls) {
-                controls.style.display = "none";
-            }
-
-            const chartMap = [
-                { canvas: document.getElementById("categoryChart"), chart: categoryChart },
-                { canvas: document.getElementById("sixMonthChart"), chart: sixMonthChart },
-                { canvas: document.getElementById("dailyChart"),    chart: dailyChart },
-                { canvas: document.getElementById("weeklyChart"),   chart: weeklyChart }
-            ];
-
-            const replacements = [];
-
-            chartMap.forEach(function (entry) {
-
-                if (!entry.canvas || !entry.chart) {
-                    return;
-                }
-
-                const img = document.createElement("img");
-
-                img.src = entry.chart.toBase64Image("image/png", 1);
-                img.style.width = entry.canvas.style.width || "100%";
-                img.style.height = entry.canvas.style.height || "320px";
-                img.style.display = "block";
-
-                entry.canvas.parentNode.insertBefore(img, entry.canvas);
-                entry.canvas.style.display = "none";
-
-                replacements.push({
-                    canvas: entry.canvas,
-                    img: img
-                });
-
-            });
-
-            try {
-
-                const canvas =
-                    await html2canvas(
-                        report,
-                        {
-                            scale: 2,
-                            backgroundColor: "#ffffff",
-                            useCORS: true,
-                            logging: false,
-                            windowWidth: report.scrollWidth,
-                            windowHeight: report.scrollHeight
-                        }
-                    );
-
-                const link =
-                    document.createElement("a");
-
-                link.download =
-                    "CampusCoin-Report-@ViewBag.SelectedMonth" + ".png";
-
-                link.href =
-                    canvas.toDataURL("image/png");
-
-                link.click();
-
-            } finally {
-
-                replacements.forEach(function (entry) {
-
-                    if (entry.img.parentNode) {
-                        entry.img.parentNode.removeChild(entry.img);
-                    }
-
-                    entry.canvas.style.display = "";
-
-                });
-
-                if (controls) {
-                    controls.style.display = "";
-                }
-
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false
             }
         }
+    );
 
-    </script>
+
+    // ==========================================
+    // SIX-MONTH CHART
+    // ==========================================
+
+    const sixMonthChart = new Chart(
+        document.getElementById("sixMonthChart"),
+        {
+            type: "bar",
+
+            data: {
+                labels: sixMonthLabels,
+
+                datasets: [
+                    {
+                        label: "Income",
+                        data: sixMonthIncome
+                    },
+                    {
+                        label: "Expenses",
+                        data: sixMonthExpenses
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+    );
 
 
-    <!-- html2canvas -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    // ==========================================
+    // DAILY CHART
+    // ==========================================
+
+    const dailyChart = new Chart(
+        document.getElementById("dailyChart"),
+        {
+            type: "line",
+
+            data: {
+                labels: dailyLabels,
+
+                datasets: [
+                    {
+                        label: "Income",
+                        data: dailyIncome,
+                        tension: 0.3
+                    },
+                    {
+                        label: "Expenses",
+                        data: dailyExpenses,
+                        tension: 0.3
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+    );
+
+
+    // ==========================================
+    // WEEKLY CHART
+    // ==========================================
+
+    const weeklyChart = new Chart(
+        document.getElementById("weeklyChart"),
+        {
+            type: "bar",
+
+            data: {
+                labels: weeklyLabels,
+
+                datasets: [
+                    {
+                        label: "Income",
+                        data: weeklyIncome
+                    },
+                    {
+                        label: "Expenses",
+                        data: weeklyExpenses
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }
+    );
+
+
+    // ==========================================
+    // CSV EXPORT
+    // ==========================================
+
+    function downloadReportCsv() {
+
+        const rows = [];
+
+
+        // ==========================================
+        // REPORT INFORMATION
+        // ==========================================
+
+        rows.push([
+            "CampusCoin Financial Report"
+        ]);
+
+        rows.push([
+            "Selected Month",
+            @Html.Raw(JsonSerializer.Serialize(
+                (string)ViewBag.MonthDisplay
+            ))
+        ]);
+
+        rows.push([]);
+
+
+        // ==========================================
+        // MONTHLY SUMMARY
+        // ==========================================
+
+        rows.push([
+            "Monthly Summary"
+        ]);
+
+        rows.push([
+            "Total Income",
+            @Html.Raw(JsonSerializer.Serialize(
+                ((decimal)ViewBag.TotalIncome).ToString(
+                    "0.00",
+                    System.Globalization.CultureInfo.InvariantCulture
+                )
+            ))
+        ]);
+
+        rows.push([
+            "Total Expenses",
+            @Html.Raw(JsonSerializer.Serialize(
+                ((decimal)ViewBag.TotalExpenses).ToString(
+                    "0.00",
+                    System.Globalization.CultureInfo.InvariantCulture
+                )
+            ))
+        ]);
+
+        rows.push([
+            "Balance",
+            @Html.Raw(JsonSerializer.Serialize(
+                ((decimal)ViewBag.Balance).ToString(
+                    "0.00",
+                    System.Globalization.CultureInfo.InvariantCulture
+                )
+            ))
+        ]);
+
+        rows.push([]);
+
+
+        // ==========================================
+        // EXPENSE BY CATEGORY
+        // ==========================================
+
+        rows.push([
+            "Expense by Category"
+        ]);
+
+        rows.push([
+            "Category",
+            "Amount"
+        ]);
+
+        @foreach (
+            var item in
+            categorySummary ??
+            new List<CampusCoin.Controllers.ReportsController.CategoryReportItem>()
+        )
+        {
+            <text>
+            rows.push([
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.CategoryName
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Amount.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                ))
+            ]);
+            </text>
+        }
+
+        rows.push([]);
+
+
+        // ==========================================
+        // SIX-MONTH SUMMARY
+        // ==========================================
+
+        rows.push([
+            "Six-Month Income vs Expenses"
+        ]);
+
+        rows.push([
+            "Month",
+            "Income",
+            "Expenses",
+            "Balance"
+        ]);
+
+        @foreach (
+            var item in
+            sixMonthSummary ??
+            new List<CampusCoin.Controllers.ReportsController.SixMonthReportItem>()
+        )
+        {
+            var balance = item.Income - item.Expenses;
+
+            <text>
+            rows.push([
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Month.ToString("MMMM yyyy")
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Income.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Expenses.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    balance.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                ))
+            ]);
+            </text>
+        }
+
+        rows.push([]);
+
+
+        // ==========================================
+        // DAILY REPORT
+        // ==========================================
+
+        rows.push([
+            "Daily Report"
+        ]);
+
+        rows.push([
+            "Date",
+            "Income",
+            "Expenses",
+            "Balance"
+        ]);
+
+        @foreach (
+            var item in
+            dailySummary ??
+            new List<CampusCoin.Controllers.ReportsController.DailyReportItem>()
+        )
+        {
+            var balance = item.Income - item.Expenses;
+
+            <text>
+            rows.push([
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Date.ToString("dd MMM yyyy")
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Income.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Expenses.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    balance.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                ))
+            ]);
+            </text>
+        }
+
+        rows.push([]);
+
+
+        // ==========================================
+        // WEEKLY REPORT
+        // ==========================================
+
+        rows.push([
+            "Weekly Report"
+        ]);
+
+        rows.push([
+            "Week",
+            "Income",
+            "Expenses",
+            "Balance"
+        ]);
+
+        @foreach (
+            var item in
+            weeklySummary ??
+            new List<CampusCoin.Controllers.ReportsController.WeeklyReportItem>()
+        )
+        {
+            var balance = item.Income - item.Expenses;
+
+            <text>
+            rows.push([
+                @Html.Raw(JsonSerializer.Serialize(
+                    $"{item.WeekStart:dd MMM} - {item.WeekEnd:dd MMM yyyy}"
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Income.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    item.Expenses.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                )),
+                @Html.Raw(JsonSerializer.Serialize(
+                    balance.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                ))
+            ]);
+            </text>
+        }
+
+        rows.push([]);
+
+
+        // ==========================================
+        // TRANSACTIONS
+        // ==========================================
+
+        rows.push([
+            "Transactions"
+        ]);
+
+        rows.push([
+            "Date",
+            "Category",
+            "Type",
+            "Description",
+            "Amount"
+        ]);
+
+        @foreach (
+            var transaction in
+            transactions ??
+            new List<CampusCoin.Domain.Entities.Transaction>()
+        )
+        {
+            var isIncome =
+                transaction.TransactionType
+                == CampusCoin.Domain.Enums.TransactionType.Income;
+
+            <text>
+            rows.push([
+                @Html.Raw(JsonSerializer.Serialize(
+                    transaction.TransactionDate.ToString(
+                        "dd MMM yyyy"
+                    )
+                )),
+
+                @Html.Raw(JsonSerializer.Serialize(
+                    transaction.Category?.Name ?? "-"
+                )),
+
+                @Html.Raw(JsonSerializer.Serialize(
+                    isIncome ? "Income" : "Expense"
+                )),
+
+                @Html.Raw(JsonSerializer.Serialize(
+                    transaction.Description ?? "-"
+                )),
+
+                @Html.Raw(JsonSerializer.Serialize(
+                    transaction.Amount.ToString(
+                        "0.00",
+                        System.Globalization.CultureInfo.InvariantCulture
+                    )
+                ))
+            ]);
+            </text>
+        }
+
+
+        // ==========================================
+        // ESCAPE CSV VALUES
+        // ==========================================
+
+        function escapeCsvValue(value) {
+
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            value = String(value);
+
+            if (
+                value.includes('"') ||
+                value.includes(',') ||
+                value.includes('\n') ||
+                value.includes('\r')
+            ) {
+                value =
+                    '"' +
+                    value.replace(/"/g, '""') +
+                    '"';
+            }
+
+            return value;
+        }
+
+
+        // ==========================================
+        // CREATE CSV CONTENT
+        // ==========================================
+
+        const csvContent = rows
+            .map(row =>
+                row
+                    .map(escapeCsvValue)
+                    .join(",")
+            )
+            .join("\r\n");
+
+
+        // ==========================================
+        // CREATE DOWNLOAD FILE
+        // ==========================================
+
+        const blob = new Blob(
+            [
+                "\uFEFF" + csvContent
+            ],
+            {
+                type: "text/csv;charset=utf-8;"
+            }
+        );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "CampusCoin-Report-@ViewBag.SelectedMonth" + ".csv";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+    }
+
+</script>
+
+
+
 
 
     <!-- Bootstrap -->

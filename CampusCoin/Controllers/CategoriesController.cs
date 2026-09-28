@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using static CampusCoin.Controllers.AdminController;
 
-
 namespace CampusCoin.Controllers;
 
 [Authorize(Roles = "Student")]
@@ -20,6 +19,8 @@ public class CategoriesController : Controller
     {
         _context = context;
     }
+
+    // Index start
 
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -36,6 +37,11 @@ public class CategoriesController : Controller
 
         return View(categories);
     }
+
+    // Index end
+
+
+    // Create start
 
     [HttpGet]
     public IActionResult Create()
@@ -70,7 +76,7 @@ public class CategoriesController : Controller
 
         var exists = await _context.Categories
             .AnyAsync(c =>
-                c.Type == input.Type &&
+                c.Type == input.Type.Value &&
                 c.Name == name &&
                 (c.IsDefault || c.UserId == userId)
             );
@@ -88,7 +94,7 @@ public class CategoriesController : Controller
         var category = new Category
         {
             Name = name,
-            Type = input.Type,
+            Type = input.Type.Value,
             IsDefault = false,
             UserId = userId,
             CreatedAt = DateTime.UtcNow
@@ -100,15 +106,26 @@ public class CategoriesController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    // Create end
+
+
+    // Category input start
+
     public class CategoryInput
     {
         [Required]
         [StringLength(50)]
         public string Name { get; set; } = string.Empty;
 
-        [Required]
-        public CategoryType Type { get; set; }
+        [Required(ErrorMessage = "Please select a category type.")]
+        public CategoryType? Type { get; set; }
     }
+
+    // Category input end
+
+
+    // Edit start
 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -140,8 +157,8 @@ public class CategoriesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
-    int id,
-    CategoryInput input)
+        int id,
+        CategoryInput input)
     {
         if (!ModelState.IsValid)
         {
@@ -178,7 +195,7 @@ public class CategoriesController : Controller
         var exists = await _context.Categories
             .AnyAsync(c =>
                 c.CategoryId != id &&
-                c.Type == input.Type &&
+                c.Type == input.Type.Value &&
                 c.Name == name &&
                 (c.IsDefault || c.UserId == userId)
             );
@@ -194,77 +211,78 @@ public class CategoriesController : Controller
         }
 
         category.Name = name;
-        category.Type = input.Type;
+        category.Type = input.Type.Value;
 
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));
     }
 
+    // Edit end
+
+
+    // Delete start
+
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
-        {
-            var userId = int.Parse(
-                User.FindFirstValue(ClaimTypes.NameIdentifier)!
-            );
-    
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(c =>
-                    c.CategoryId == id &&
-                    c.UserId == userId &&
-                    !c.IsDefault);
-    
-            if (category == null)
-            {
-                return NotFound();
-            }
-    
-            return View(category);
-    }
+    {
+        var userId = int.Parse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier)!
+        );
 
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.CategoryId == id &&
+                c.UserId == userId &&
+                !c.IsDefault);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        return View(category);
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var userId = int.Parse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier)!
+        );
+
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c =>
+                c.CategoryId == id &&
+                c.UserId == userId &&
+                !c.IsDefault);
+
+        if (category == null)
         {
-            var userId = int.Parse(
-                User.FindFirstValue(ClaimTypes.NameIdentifier)!
-            );
-    
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(c =>
-                    c.CategoryId == id &&
-                    c.UserId == userId &&
-                    !c.IsDefault);
-    
-            if (category == null)
-            {
-                return NotFound();
-            }
-    
-            var hasTransactions = await _context.Transactions
-                .AnyAsync(t =>
-                    t.CategoryId == id &&
-                    t.UserId == userId);
-    
-            if (hasTransactions)
-            {
-                TempData["Error"] =
-                    "This category cannot be deleted because it is being used by transactions.";
-    
-                return RedirectToAction(nameof(Index));
-            }
-    
-            _context.Categories.Remove(category);
-    
-            await _context.SaveChangesAsync();
-    
+            return NotFound();
+        }
+
+        var hasTransactions = await _context.Transactions
+            .AnyAsync(t =>
+                t.CategoryId == id &&
+                t.UserId == userId);
+
+        if (hasTransactions)
+        {
+            TempData["Error"] =
+                "This category cannot be deleted because it is being used by transactions.";
+
             return RedirectToAction(nameof(Index));
         }
 
+        _context.Categories.Remove(category);
 
+        await _context.SaveChangesAsync();
 
-
-
+        return RedirectToAction(nameof(Index));
     }
+
+    // Delete end
+}

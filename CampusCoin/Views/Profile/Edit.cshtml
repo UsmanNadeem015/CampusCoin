@@ -27,6 +27,20 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --brand-navy: #0f172a;
+            --brand-navy-light: #1e293b;
+            --brand-gold: #d97706;
+            --brand-gold-hover: #b45309;
+            --brand-gold-light: #fbbf24;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --info: #2563eb;
+        }
+
         body {
             margin: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -34,95 +48,110 @@
             color: #0f172a;
         }
 
-/* =========================================
-   NAVBAR
-   ========================================= */
+        .fa-solid,
+        .fa-regular,
+        .fa-brands {
+            font-family: "Font Awesome 6 Free" !important;
+        }
 
-.main-navbar {
-    background: #ffffff;
-    border-bottom: 1px solid var(--border-color);
-}
+        .fa-solid {
+            font-weight: 900 !important;
+        }
 
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--brand-navy);
-    text-decoration: none;
-}
+        /* =========================================
+           NAVBAR
+           ========================================= */
 
-.brand-icon {
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--brand-navy);
-    border: 1px solid var(--brand-gold);
-    color: var(--brand-gold-light);
-}
+        .main-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-.brand-name {
-    font-size: 1.05rem;
-    font-weight: 800;
-    line-height: 1;
-}
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand-navy);
+            text-decoration: none;
+        }
 
-.brand-name span {
-    color: var(--brand-gold);
-}
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-navy);
+            border: 1px solid var(--brand-gold);
+            color: var(--brand-gold-light);
+        }
 
-.brand-subtitle {
-    display: block;
-    margin-top: 4px;
-    color: var(--text-muted);
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-}
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1;
+        }
 
-.nav-link {
-    color: var(--brand-navy) !important;
-    font-size: 0.78rem;
-    font-weight: 700;
-}
+        .brand-name span {
+            color: var(--brand-gold);
+        }
 
-.nav-link:hover,
-.nav-link.active {
-    color: var(--brand-gold) !important;
-}
+        .brand-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
 
-.btn {
-    font-weight: 700;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
+        .nav-link {
+            color: var(--brand-navy) !important;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
 
-.btn:hover {
-    transform: translateY(-1px);
-}
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--brand-gold) !important;
+        }
 
-.btn-navy {
-    background: var(--brand-navy) !important;
-    border-color: var(--brand-navy) !important;
-    color: #ffffff !important;
-}
+        .btn {
+            font-weight: 700;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
 
-.btn-navy:hover {
-    background: var(--brand-navy-light) !important;
-    border-color: var(--brand-navy-light) !important;
-}
+        .btn:hover {
+            transform: translateY(-1px);
+        }
 
-.btn-outline-navy {
-    background: transparent !important;
-    border: 1px solid var(--brand-navy) !important;
-    color: var(--brand-navy) !important;
-}
+        .btn-navy {
+            background: var(--brand-navy) !important;
+            border-color: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
 
-.btn-outline-navy:hover {
-    background: var(--brand-navy) !important;
-    color: #ffffff !important;
-}
+        .btn-navy:hover {
+            background: var(--brand-navy-light) !important;
+            border-color: var(--brand-navy-light) !important;
+        }
+
+        .btn-outline-navy {
+            background: transparent !important;
+            border: 1px solid var(--brand-navy) !important;
+            color: var(--brand-navy) !important;
+        }
+
+        .btn-outline-navy:hover {
+            background: var(--brand-navy) !important;
+            color: #ffffff !important;
+        }
+
+        /* =========================================
+           PAGE CONTENT
+           ========================================= */
+
         .page-wrapper {
             max-width: 800px;
             margin: 0 auto;
@@ -209,6 +238,15 @@
             margin-bottom: 22px;
         }
 
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .validation-summary:empty {
+            display: none;
+        }
+
         .button-row {
             display: flex;
             gap: 12px;
@@ -234,6 +272,7 @@
 
         .btn-gold:hover {
             background: #b45309;
+            color: white;
             transform: translateY(-1px);
         }
 
@@ -283,129 +322,129 @@
 
 <body>
 
-   <nav class="navbar navbar-expand-lg main-navbar">
+    <nav class="navbar navbar-expand-lg main-navbar">
 
-    <div class="container-fluid px-4 px-lg-5">
+        <div class="container-fluid px-4 px-lg-5">
 
-        <a asp-controller="Home"
-           asp-action="Index"
-           class="brand">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="brand">
 
-            <div class="brand-icon">
-                <i class="fa-solid fa-coins"></i>
-            </div>
-
-            <div>
-
-                <div class="brand-name">
-                    CAMPUS<span>COIN</span>
+                <div class="brand-icon">
+                    <i class="fa-solid fa-coins"></i>
                 </div>
 
-                <span class="brand-subtitle">
-                    Smart Student Budgeting
-                </span>
+                <div>
 
-            </div>
+                    <div class="brand-name">
+                        CAMPUS<span>COIN</span>
+                    </div>
 
-        </a>
+                    <span class="brand-subtitle">
+                        Smart Student Budgeting
+                    </span>
 
+                </div>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#studentNavbar">
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
+            </a>
 
 
-        <div class="collapse navbar-collapse"
-             id="studentNavbar">
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#studentNavbar">
 
-            <div class="navbar-nav mx-auto">
+                <span class="navbar-toggler-icon"></span>
 
-                <a asp-controller="Dashboard"
-                   asp-action="Index"
-                   class="nav-link">
-                    Dashboard
-                </a>
-
-                <a asp-controller="Transactions"
-                   asp-action="Index"
-                   class="nav-link">
-                    Transactions
-                </a>
-
-                <a asp-controller="Budgets"
-                   asp-action="Index"
-                   class="nav-link">
-                    Budgets
-                </a>
-
-                <a asp-controller="Categories"
-                   asp-action="Index"
-                   class="nav-link">
-                    Categories
-                </a>
-
-                <a asp-controller="SavingTips"
-                   asp-action="Index"
-                   class="nav-link">
-                    Saving Tips
-                </a>
-
-                <a asp-controller="Bookmarks"
-                   asp-action="Index"
-                   class="nav-link">
-                    Bookmarks
-                </a>
-
-                <a asp-controller="Notes"
-                   asp-action="Index"
-                   class="nav-link">
-                    Notes
-                </a>
-
-            </div>
+            </button>
 
 
-            <div class="d-flex align-items-center gap-2">
+            <div class="collapse navbar-collapse"
+                 id="studentNavbar">
 
-                <a asp-controller="Profile"
-                   asp-action="Index"
-                   class="btn btn-outline-navy btn-sm">
+                <div class="navbar-nav mx-auto">
 
-                    <i class="fa-solid fa-user me-1"></i>
-                    Profile
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link">
+                        Dashboard
+                    </a>
 
-                </a>
+                    <a asp-controller="Transactions"
+                       asp-action="Index"
+                       class="nav-link">
+                        Transactions
+                    </a>
+
+                    <a asp-controller="Budgets"
+                       asp-action="Index"
+                       class="nav-link">
+                        Budgets
+                    </a>
+
+                    <a asp-controller="Categories"
+                       asp-action="Index"
+                       class="nav-link">
+                        Categories
+                    </a>
+
+                    <a asp-controller="SavingTips"
+                       asp-action="Index"
+                       class="nav-link">
+                        Saving Tips
+                    </a>
+
+                    <a asp-controller="Bookmarks"
+                       asp-action="Index"
+                       class="nav-link">
+                        Bookmarks
+                    </a>
+
+                    <a asp-controller="Notes"
+                       asp-action="Index"
+                       class="nav-link">
+                        Notes
+                    </a>
+
+                </div>
 
 
-                <form asp-controller="Account"
-                      asp-action="Logout"
-                      method="post"
-                      class="d-inline">
+                <div class="d-flex align-items-center gap-2">
 
-                    @Html.AntiForgeryToken()
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-navy btn-sm">
 
-                    <button type="submit"
-                            class="btn btn-navy btn-sm">
+                        <i class="fa-solid fa-user me-1"></i>
+                        Profile
 
-                        <i class="fa-solid fa-right-from-bracket me-1"></i>
-                        Logout
+                    </a>
 
-                    </button>
 
-                </form>
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="d-inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-navy btn-sm">
+
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>
+                            Logout
+
+                        </button>
+
+                    </form>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-</nav>
+    </nav>
 
     <!-- Main Content -->
     <main class="page-wrapper">

@@ -92,8 +92,8 @@ public class AdminController : Controller
         if (user == null)
             return NotFound();
 
-        
-        var currentUserIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        var currentUserIdClaim = User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier);
 
         if (currentUserIdClaim != null &&
             int.TryParse(currentUserIdClaim.Value, out int currentUserId) &&
@@ -142,14 +142,30 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateCategory(CategoryInput input)
     {
+        if (string.IsNullOrWhiteSpace(input.Type))
+        {
+            ModelState.Remove(nameof(input.Type));
+            ModelState.AddModelError(nameof(input.Type), "Please select a category.");
+        }
+
         if (!ModelState.IsValid)
         {
             return View(input);
         }
 
+        if (!Enum.TryParse<CategoryType>(input.Type, out var type))
+        {
+            ModelState.AddModelError(
+                "Type",
+                "Please select a valid category type."
+            );
+
+            return View(input);
+        }
+
         var exists = await _context.Categories.AnyAsync(c =>
             c.IsDefault &&
-            c.Type == input.Type &&
+            c.Type == type &&
             c.Name == input.Name
         );
 
@@ -166,12 +182,13 @@ public class AdminController : Controller
         var category = new Category
         {
             Name = input.Name,
-            Type = input.Type,
+            Type = type,
             IsDefault = true,
             UserId = null
         };
 
         _context.Categories.Add(category);
+
         await _context.SaveChangesAsync();
 
         TempData["Success"] = "Default category added successfully.";
@@ -196,7 +213,7 @@ public class AdminController : Controller
         var input = new CategoryInput
         {
             Name = category.Name,
-            Type = category.Type
+            Type = category.Type.ToString()   // enum → string
         };
 
         ViewBag.CategoryId = category.CategoryId;
@@ -216,6 +233,17 @@ public class AdminController : Controller
             return View(input);
         }
 
+        if (!Enum.TryParse<CategoryType>(input.Type, out var type))
+        {
+            ModelState.AddModelError(
+                "Type",
+                "Please select a valid category type."
+            );
+
+            ViewBag.CategoryId = id;
+            return View(input);
+        }
+
         var category = await _context.Categories
             .FirstOrDefaultAsync(c => c.CategoryId == id && c.IsDefault);
 
@@ -227,7 +255,7 @@ public class AdminController : Controller
         var exists = await _context.Categories.AnyAsync(c =>
             c.IsDefault &&
             c.CategoryId != id &&
-            c.Type == input.Type &&
+            c.Type == type &&
             c.Name == input.Name
         );
 
@@ -243,7 +271,7 @@ public class AdminController : Controller
         }
 
         category.Name = input.Name;
-        category.Type = input.Type;
+        category.Type = type;
 
         await _context.SaveChangesAsync();
 
@@ -308,9 +336,11 @@ public class AdminController : Controller
     // Input class start
     public class CategoryInput
     {
+        [Required(ErrorMessage = "Please enter a category name.")]
         public string Name { get; set; } = string.Empty;
 
-        public CategoryType Type { get; set; }
+        [Required(ErrorMessage = "Please select a category.")]
+        public string? Type { get; set; }
     }
     // Input end
 
@@ -473,6 +503,9 @@ public class AdminController : Controller
         var totalTransactions = await _context.Transactions
             .CountAsync();
 
+        var totalTransactionAmount = await _context.Transactions
+            .SumAsync(t => t.Amount);
+
         var mostUsedCategories = await _context.Transactions
             .Include(t => t.Category)
             .Where(t => t.Category != null)
@@ -488,10 +521,10 @@ public class AdminController : Controller
 
         ViewBag.ActiveUsers = activeUsers;
         ViewBag.TotalTransactions = totalTransactions;
+        ViewBag.TotalTransactionAmount = totalTransactionAmount;
         ViewBag.MostUsedCategories = mostUsedCategories;
 
         return View();
     }
     // Stats end
 }
-

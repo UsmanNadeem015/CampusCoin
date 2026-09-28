@@ -378,6 +378,98 @@
 
     </style>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const nameInput = document.getElementById("Name");
+        const typeSelect = document.getElementById("Type");
+
+        function clearValidation() {
+
+            // Clear Name validation
+            const nameError = document.querySelector(
+                '[data-valmsg-for="Name"]'
+            );
+
+            if (nameError) {
+                nameError.textContent = "";
+                nameError.classList.remove("field-validation-error");
+                nameError.classList.add("field-validation-valid");
+            }
+
+            // Clear Type validation
+            const typeError = document.querySelector(
+                '[data-valmsg-for="Type"]'
+            );
+
+            if (typeError) {
+                typeError.textContent = "";
+                typeError.classList.remove("field-validation-error");
+                typeError.classList.add("field-validation-valid");
+            }
+
+            // Remove the duplicate error from validation summary
+            const summary = document.querySelector(
+                ".validation-summary"
+            );
+
+            if (summary) {
+
+                const listItems = summary.querySelectorAll("li");
+
+                listItems.forEach(function (item) {
+
+                    if (
+                        item.textContent.includes(
+                            "already exists"
+                        )
+                    ) {
+                        item.remove();
+                    }
+
+                });
+
+                // Hide summary if there are no errors left
+                const remainingErrors =
+                    summary.querySelectorAll("li");
+
+                if (remainingErrors.length === 0) {
+                    summary.style.display = "none";
+                }
+            }
+
+            // Remove invalid styling from the fields
+            if (nameInput) {
+                nameInput.classList.remove(
+                    "input-validation-error"
+                );
+            }
+
+            if (typeSelect) {
+                typeSelect.classList.remove(
+                    "input-validation-error"
+                );
+            }
+        }
+
+
+        if (nameInput) {
+            nameInput.addEventListener(
+                "input",
+                clearValidation
+            );
+        }
+
+        if (typeSelect) {
+            typeSelect.addEventListener(
+                "change",
+                clearValidation
+            );
+        }
+
+    });
+</script>
+
 </head>
 
 
@@ -521,42 +613,54 @@
 
                     @Html.AntiForgeryToken()
 
-                    <div class="mb-4">
+<div class="mb-4">
 
-                        <label asp-for="Name"
-                               class="form-label">
+    <label asp-for="Name"
+           class="form-label">
 
-                            Category Name
+        Category Name
 
-                        </label>
+    </label>
 
-                        <input asp-for="Name"
-                               class="form-control"
-                               placeholder="e.g. Books & Stationery" />
+    <input asp-for="Name"
+           class="form-control"
+           placeholder="e.g. Books & Stationery" />
 
-                        <div class="field-help">
-                            Use a clear name that students will easily recognize.
-                        </div>
+    <span asp-validation-for="Name"
+          class="field-validation-valid">
+    </span>
 
-                    </div>
+    <div class="field-help">
+        Use a clear name that students will easily recognize.
+    </div>
 
-                    <div class="mb-4">
+</div>
 
-                        <label asp-for="Type"
-                               class="form-label">
 
-                            Category Type
+<div class="mb-4">
 
-                        </label>
+    <label asp-for="Type"
+           class="form-label">
 
-                        <select asp-for="Type"
-                                asp-items="Html.GetEnumSelectList<CampusCoin.Domain.Enums.CategoryType>()"
-                                class="form-select">
+        Category Type
 
-                        </select>
+    </label>
 
-                    </div>
+    <select asp-for="Type"
+            asp-items="Html.GetEnumSelectList<CampusCoin.Domain.Enums.CategoryType>()"
+            class="form-select">
 
+        <option value="">
+            -- Select Category Type --
+        </option>
+
+    </select>
+
+    <span asp-validation-for="Type"
+          class="field-validation-valid">
+    </span>
+
+</div>
                     <div class="form-actions">
 
                         <a asp-controller="Admin"
