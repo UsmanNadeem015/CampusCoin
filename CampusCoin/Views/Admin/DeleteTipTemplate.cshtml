@@ -1,4 +1,4 @@
-﻿@model CampusCoin.Domain.Entities.TipTemplate
+@model CampusCoin.Domain.Entities.TipTemplate
 
 @{
     Layout = null;
@@ -192,7 +192,11 @@
         }
 
         .page-header {
-            background: var(--brand-navy);
+            background-color: var(--brand-navy);
+            background-image: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.85)), url('/images/banners/admin-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #ffffff;
             padding: 40px 0;
             border-bottom: 1px solid #334155;

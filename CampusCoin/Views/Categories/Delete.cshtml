@@ -1,4 +1,4 @@
-﻿@model CampusCoin.Domain.Entities.Category
+@model CampusCoin.Domain.Entities.Category
 
 @{
     Layout = null;
@@ -162,7 +162,11 @@
 
         .page-header {
             padding: 42px 0;
-            background: var(--brand-navy);
+            background-color: var(--brand-navy);
+            background-image: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.85)), url('/images/banners/categories-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #ffffff;
         }
 
